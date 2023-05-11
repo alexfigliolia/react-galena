@@ -28,8 +28,7 @@ export const connectState = <StateInstance extends State>(
           super(props);
           this.state = selection(state);
           this.listener = state.subscribe((nextState) => {
-            // @ts-ignore
-            this.setState(selection(nextState));
+            this.setState(selection(nextState as StateInstance));
           });
         }
 
