@@ -1,12 +1,26 @@
-import type { State } from "Galena/State";
+import { State } from "Galena/State";
 import { Middleware } from "Middleware/Middleware";
 
+/**
+ * Logger
+ *
+ * A middleware for Redux-style logging! Each state transition
+ * will log to the console the `State` instance that changed
+ * along with a before and after snapshot of the current state:
+ *
+ * ```typescript
+ * const State = new Galena([new Logger()]);
+ * // if using isolated state instances:
+ * const MyState = new State(...args);
+ * MyState.registerMiddleware(new Logger())
+ * ```
+ */
 export class Logger extends Middleware {
   private previousState: Record<string, any> | null = null;
   scopedMutation: ((...args: any[]) => any) | null = null;
 
   override onBeforeUpdate(state: State) {
-    this.previousState = Object.freeze({ ...state.currentState });
+    this.previousState = State.clone(state.currentState);
   }
 
   override onUpdate(state: State) {
@@ -30,6 +44,11 @@ export class Logger extends Middleware {
     this.previousState = null;
   }
 
+  /**
+   * Time
+   *
+   * Returns the time in which a given state transition completed
+   */
   private get time() {
     const date = new Date();
     const mHours = date.getHours();
