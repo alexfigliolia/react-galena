@@ -1,5 +1,5 @@
-import { Middleware } from "Middleware/Middleware";
 import type { State } from "Galena/State";
+import { Middleware } from "Middleware/Middleware";
 
 export class Profiler extends Middleware {
   private threshold: number;
