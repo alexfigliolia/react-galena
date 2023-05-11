@@ -11,7 +11,6 @@ const connectState = (state) => {
                     super(props);
                     this.state = selection(state);
                     this.listener = state.subscribe((nextState) => {
-                        // @ts-ignore
                         this.setState(selection(nextState));
                     });
                 }

@@ -20,8 +20,8 @@ export const connectState = <StateInstance extends State>(
         Subtract<ComponentProps, ReturnType<SelectorFunction>>,
         ReturnType<SelectorFunction>
       > {
-        listener: string;
         state: any;
+        listener: string;
         constructor(
           props: Subtract<ComponentProps, ReturnType<SelectorFunction>>
         ) {

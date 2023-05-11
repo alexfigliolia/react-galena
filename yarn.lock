@@ -1016,7 +1016,7 @@ functions-have-names@^1.2.2, functions-have-names@^1.2.3:
 
 "galena@https://github.com/alexfigliolia/galena.git":
   version "1.0.0"
-  resolved "https://github.com/alexfigliolia/galena.git#ab58086a7207224f2c4921f98d01a0c1fda5ff3a"
+  resolved "https://github.com/alexfigliolia/galena.git#023b210ea4168dfbcea2226d87c1ac04622e0def"
   dependencies:
     "@figliolia/event-emitter" "^1.0.6"
 
