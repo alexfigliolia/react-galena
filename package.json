@@ -1,5 +1,5 @@
 {
-  "name": "@figliolia/galena",
+  "name": "@figliolia/react-galena",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -15,10 +15,14 @@
     "lint": "tsc --noemit && eslint ./ --fix"
   },
   "dependencies": {
-    "@figliolia/event-emitter": "^1.0.6"
+    "galena": "https://github.com/alexfigliolia/galena.git"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
   },
   "devDependencies": {
     "@types/node": "^16.7.13",
+    "@types/react": "^18.2.6",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
     "eslint": "^8.39.0",

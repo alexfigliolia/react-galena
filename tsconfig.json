@@ -13,6 +13,7 @@
 			"dom.iterable",
 			"esnext"
 		],
+		"jsx": "react-jsx",
 		"allowJs": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true,
@@ -25,18 +26,6 @@
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
-		"baseUrl": "./src",
-		"paths": {
-			"galena/*": [
-				"Galena/*"
-			],
-			"Middleware/*": [
-				"Middleware/*"
-			],
-			"Middlewares/*": [
-				"Middlewares/*"
-			]
-		}
 	},
 	"include": [
 		"src"
