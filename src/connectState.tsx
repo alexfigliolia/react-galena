@@ -9,7 +9,7 @@ export const connectState = <StateInstance extends State>(
   return <
     SelectorFunction extends (
       state: StateInstance,
-      ownProps: unknown
+      ownProps: Record<string, any>
     ) => Record<string, any>
   >(
     selection: SelectorFunction

@@ -9,7 +9,7 @@ export const connectGalena = <StateInstance extends Galena<any>>(
   return <
     SelectorFunction extends (
       state: StateInstance["state"],
-      ownProps: unknown
+      ownProps: Record<string, any>
     ) => Record<string, any>
   >(
     selection: SelectorFunction
