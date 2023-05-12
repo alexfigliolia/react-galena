@@ -1,5 +1,5 @@
 import type { State } from "galena";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * ## Slice Hook Factory
@@ -34,19 +34,25 @@ import { useEffect, useState } from "react";
  * const Component = () => {
  *   const total = useListItems(state => state.get("list").length);
  *
- *   return <div>{total}</div>
+ *   return <div>{total}</div>;
  * }
  * ```
  */
 export const createUseState = <T extends State>(slice: T) => {
-  return function useGalenaState<F extends (slice: T) => any>(selection: F) {
-    const [state, setState] = useState<ReturnType<F>>(selection(slice));
+  return function useGalenaState<F extends (slice: T["currentState"]) => any>(
+    selection: F
+  ) {
+    const instanceRef = useRef(slice);
+    const [state, setState] = useState<ReturnType<F>>(
+      selection(instanceRef.current.currentState)
+    );
     useEffect(() => {
-      const ID = slice.subscribe((state) => {
-        setState(selection(state as T));
+      const sliceReference = instanceRef.current;
+      const ID = sliceReference.subscribe((state) => {
+        setState(selection(state.currentState));
       });
       return () => {
-        state.unsubscribe(ID);
+        sliceReference.unsubscribe(ID);
       };
     }, []);
     return state;

@@ -1,5 +1,5 @@
 import type { Galena } from "galena";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * ## Create Use Galena
@@ -39,15 +39,19 @@ export const createUseGalena = <T extends Galena<any>>(galena: T) => {
   return function useGalena<F extends (state: T["state"]) => any>(
     selection: F
   ) {
-    const [state, setState] = useState<ReturnType<F>>(selection(galena.state));
+    const instanceRef = useRef(galena);
+    const [state, setState] = useState<ReturnType<F>>(
+      selection(instanceRef.current.state)
+    );
     useEffect(() => {
-      const ID = galena.subscribe((state) => {
-        setState(selection(state));
+      const galenaInstance = instanceRef.current;
+      const ID = galenaInstance.subscribe((state) => {
+        setState(selection(state.state));
       });
       return () => {
-        galena.unsubscribe(ID);
+        galenaInstance.unsubscribe(ID);
       };
-    }, []);
+    }, [selection]);
     return state;
   };
 };

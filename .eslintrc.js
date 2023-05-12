@@ -10,6 +10,7 @@ module.exports = {
 		"plugin:@typescript-eslint/recommended",
 		"eslint:recommended",
 		"prettier",
+		"plugin:react-hooks/recommended",
 		"plugin:@typescript-eslint/recommended-requiring-type-checking",
 	],
 	overrides: [
