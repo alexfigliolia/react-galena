@@ -1,4 +1,4 @@
 export { connectState } from "./connectState";
-export { connectGalena } from "./connectGalena";
-export { hookFactory } from "./hookFactory";
+export { connectSlice } from "./connectSlice";
 export { stateHookFactory } from "./stateHookFactory";
+export { sliceHookFactory } from "./sliceHookFactory";
