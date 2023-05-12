@@ -2,7 +2,7 @@ import type { State } from "galena";
 import { useEffect, useRef, useState } from "react";
 
 /**
- * ## Slice Hook Factory
+ * ## State Hook Factory
  *
  * `useState` hook generation for your `State` instances! To create
  * a `useState` hook to use in your React Components, simply create
@@ -32,7 +32,7 @@ import { useEffect, useRef, useState } from "react";
  * import { useListItems } from "./ListItems";
  *
  * const Component = () => {
- *   const total = useListItems(state => state.get("list").length);
+ *   const total = useListItems(state => state.list.length);
  *
  *   return <div>{total}</div>;
  * }
