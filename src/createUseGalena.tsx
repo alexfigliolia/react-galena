@@ -2,16 +2,16 @@ import type { Galena } from "galena";
 import { useEffect, useState } from "react";
 
 /**
- * ## State Hook Factory
+ * ## Create Use Galena
  *
  * `useState` hook generation for your `Galena` instances! To create
  * a `useState` hook to use in your React Components, simply create
- * your state, then call `stateHookFactory()` passing in your `Galena`
+ * your state, then call `createUseGalena()` passing in your `Galena`
  * instance:
  *
  * ```typescript
  * import { Galena } from "galena";
- * import { stateHookFactory } from "react-galena";
+ * import { createUseGalena } from "react-galena";
  *
  * const MyState = new Galena(...middleware);
  *
@@ -20,7 +20,7 @@ import { useEffect, useState } from "react";
  *   list: [1, 2, 3, 4]
  * });
  *
- * export const useMyState = stateHookFactory(MyState);
+ * export const useMyState = createUseGalena(MyState);
  * ```
  *
  * ### Using the useMyState Hook
@@ -35,7 +35,7 @@ import { useEffect, useState } from "react";
  * }
  * ```
  */
-export const stateHookFactory = <T extends Galena<any>>(galena: T) => {
+export const createUseGalena = <T extends Galena<any>>(galena: T) => {
   return function useGalena<F extends (state: T["state"]) => any>(
     selection: F
   ) {

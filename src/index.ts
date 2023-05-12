@@ -1,4 +1,4 @@
+export { connectGalena } from "./connectGalena";
 export { connectState } from "./connectState";
-export { connectSlice } from "./connectSlice";
-export { stateHookFactory } from "./stateHookFactory";
-export { sliceHookFactory } from "./sliceHookFactory";
+export { createUseGalena } from "./createUseGalena";
+export { createUseState } from "./createUseState";

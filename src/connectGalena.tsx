@@ -1,52 +1,46 @@
 import { Component, type ComponentType } from "react";
-import type { State } from "galena";
+import type { Galena } from "galena";
 
 import type { Subtract } from "./types";
 
 /**
- * ## Connect Galena
+ * ## Connect State
  *
  * A HOC factory for creating React Components connected
- * to your State slices. To create an HOC for your slice
- * of state, simply create your slice, then call `connectSlice()`
- * passing in your `State` instance:
+ * to your Galena State. To create your HOC simply declare
+ * your state, then call `connectGalena()` passing in your
+ * `Galena` instance
  *
  * ```typescript
- * import { State, Galena } from "galena";
- * import { connectSlice } from "react-galena";
+ * import { Galena } from "galena";
+ * import { connectGalena } from "react-galena";
  *
- * export const MyState = new Galena().createSlice("listItems", {
- *   list: [1, 2, 3, 4]
- * });
+ * export const AppState = new Galena(...middleware);
  *
- * // Or without a `Galena` instance
+ * AppState.createSlice("listItems", { list: [1, 2, 3, 4] });
  *
- * export const MyState = new State("listItems", {
- *   list: [1, 2, 3, 4]
- * })
- *
- * export const MyStateConnection = connectSlice(MyState);
+ * export const connect = connectGalena(AppState);
  * ```
- *
  * ### Use Your New Connect Function!
+ *
  * Your connect function can then be used in any component
- * that needs to be wired into your MyState slice:
+ * that needs to be wired into your Galena State:
  *
  * ```typescript
- * import { MyStateConnection, MyState } from "./MyState";
+ * import { connect, AppState } from "./AppState";
  *
  * const MyComponent: FC<{ total: number }> = ({ total }) => {
  *   return <div>{total}</div>
  * }
  *
  * const selectProps = (
- *   state: typeof MyState,
+ *   state: typeof AppState["currentState"],
  *   ownProps
  * ) => {
- *   return { total: state.get("list").length }
+ *   return { total: state.listItems.get("list").length }
  * }
  *
- * export const Counter = MyStateConnection(selectProps)(MyComponent);
+ * export const Counter = connect(selectProps)(MyComponent);
  * ```
  *
  * This composition pattern is similar to what one might find in
@@ -62,12 +56,12 @@ import type { Subtract } from "./types";
  *    1. Any specific component hierarchies
  *    2. Requiring you to declare all your state while your app is mounting
  */
-export const connectSlice = <StateInstance extends State>(
+export const connectGalena = <StateInstance extends Galena<any>>(
   state: StateInstance
 ) => {
   return <
     SelectorFunction extends (
-      state: StateInstance,
+      state: StateInstance["state"],
       ownProps: any
     ) => Record<string, any>
   >(
@@ -82,15 +76,15 @@ export const connectSlice = <StateInstance extends State>(
         Subtract<ComponentProps, ReturnType<SelectorFunction>>,
         ReturnType<SelectorFunction>
       > {
-        state: any;
         listener: string;
+        state: any;
         constructor(
           props: Subtract<ComponentProps, ReturnType<SelectorFunction>>
         ) {
           super(props);
-          this.state = selection(state, this.props);
+          this.state = selection(state.state, this.props);
           this.listener = state.subscribe((nextState) => {
-            this.setState(selection(nextState as StateInstance, this.props));
+            this.setState(selection(nextState.state, this.props));
           });
         }
 

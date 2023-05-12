@@ -1,11 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sliceHookFactory = exports.stateHookFactory = exports.connectSlice = exports.connectState = void 0;
+exports.createUseState = exports.createUseGalena = exports.connectState = exports.connectGalena = void 0;
+var connectGalena_1 = require("./connectGalena");
+Object.defineProperty(exports, "connectGalena", { enumerable: true, get: function () { return connectGalena_1.connectGalena; } });
 var connectState_1 = require("./connectState");
 Object.defineProperty(exports, "connectState", { enumerable: true, get: function () { return connectState_1.connectState; } });
-var connectSlice_1 = require("./connectSlice");
-Object.defineProperty(exports, "connectSlice", { enumerable: true, get: function () { return connectSlice_1.connectSlice; } });
-var stateHookFactory_1 = require("./stateHookFactory");
-Object.defineProperty(exports, "stateHookFactory", { enumerable: true, get: function () { return stateHookFactory_1.stateHookFactory; } });
-var sliceHookFactory_1 = require("./sliceHookFactory");
-Object.defineProperty(exports, "sliceHookFactory", { enumerable: true, get: function () { return sliceHookFactory_1.sliceHookFactory; } });
+var createUseGalena_1 = require("./createUseGalena");
+Object.defineProperty(exports, "createUseGalena", { enumerable: true, get: function () { return createUseGalena_1.createUseGalena; } });
+var createUseState_1 = require("./createUseState");
+Object.defineProperty(exports, "createUseState", { enumerable: true, get: function () { return createUseState_1.createUseState; } });

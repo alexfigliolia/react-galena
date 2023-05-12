@@ -6,12 +6,12 @@ import { useEffect, useState } from "react";
  *
  * `useState` hook generation for your `State` instances! To create
  * a `useState` hook to use in your React Components, simply create
- * your slice, then call `sliceHookFactory()` passing in your `State`
+ * your slice, then call `createUseState()` passing in your `State`
  * instance:
  *
  * ```typescript
  * import { Galena, State } from "galena";
- * import { sliceHookFactory } from "react-galena";
+ * import { createUseState } from "react-galena";
  *
  * const ListItems = new Galena(...middleware).createSlice("listItems", {
  *   list: [1, 2, 3, 4]
@@ -23,7 +23,7 @@ import { useEffect, useState } from "react";
  *   list: [1, 2, 3, 4]
  * });
  *
- * export const useListItems = sliceHookFactory(ListItems);
+ * export const useListItems = createUseState(ListItems);
  * ```
  *
  * ### Using the useListItems Hook
@@ -38,7 +38,7 @@ import { useEffect, useState } from "react";
  * }
  * ```
  */
-export const sliceHookFactory = <T extends State>(slice: T) => {
+export const createUseState = <T extends State>(slice: T) => {
   return function useGalenaState<F extends (slice: T) => any>(selection: F) {
     const [state, setState] = useState<ReturnType<F>>(selection(slice));
     useEffect(() => {
