@@ -7,7 +7,10 @@ export const connectState = <StateInstance extends State>(
   state: StateInstance
 ) => {
   return <
-    SelectorFunction extends (state: StateInstance) => Record<string, any>
+    SelectorFunction extends (
+      state: StateInstance,
+      ownProps: unknown
+    ) => Record<string, any>
   >(
     selection: SelectorFunction
   ) => {
@@ -26,9 +29,9 @@ export const connectState = <StateInstance extends State>(
           props: Subtract<ComponentProps, ReturnType<SelectorFunction>>
         ) {
           super(props);
-          this.state = selection(state);
+          this.state = selection(state, this.props);
           this.listener = state.subscribe((nextState) => {
-            this.setState(selection(nextState as StateInstance));
+            this.setState(selection(nextState as StateInstance, this.props));
           });
         }
 

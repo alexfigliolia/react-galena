@@ -9,9 +9,9 @@ const connectState = (state) => {
             return class GalenaComponent extends react_1.Component {
                 constructor(props) {
                     super(props);
-                    this.state = selection(state);
+                    this.state = selection(state, this.props);
                     this.listener = state.subscribe((nextState) => {
-                        this.setState(selection(nextState));
+                        this.setState(selection(nextState, this.props));
                     });
                 }
                 componentWillUnmount() {

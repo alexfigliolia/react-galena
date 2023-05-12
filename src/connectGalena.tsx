@@ -8,7 +8,8 @@ export const connectGalena = <StateInstance extends Galena<any>>(
 ) => {
   return <
     SelectorFunction extends (
-      state: StateInstance["state"]
+      state: StateInstance["state"],
+      ownProps: unknown
     ) => Record<string, any>
   >(
     selection: SelectorFunction
@@ -28,9 +29,9 @@ export const connectGalena = <StateInstance extends Galena<any>>(
           props: Subtract<ComponentProps, ReturnType<SelectorFunction>>
         ) {
           super(props);
-          this.state = selection(state.state);
+          this.state = selection(state.state, this.props);
           this.listener = state.subscribe((nextState) => {
-            this.setState(selection(nextState.state));
+            this.setState(selection(nextState.state, this.props));
           });
         }
 
