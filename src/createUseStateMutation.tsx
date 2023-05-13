@@ -36,9 +36,9 @@ import { useRef } from "react";
  */
 export const createUseStateMutation = <T extends State<any>>(slice: T) => {
   return function useStateMutation<
-    M extends (slice: T["currentState"]) => void | Promise<void>
+    M extends (slice: T["state"]) => void | Promise<void>
   >(mutation: M) {
-    const ref = useRef(slice.mutation(() => mutation(slice.currentState)));
+    const ref = useRef(slice.mutation(() => mutation(slice.state)));
     return ref.current;
   };
 };

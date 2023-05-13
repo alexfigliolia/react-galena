@@ -39,17 +39,17 @@ import { useEffect, useRef, useState } from "react";
  * ```
  */
 export const createUseState = <T extends State>(slice: T) => {
-  return function useGalenaState<F extends (slice: T["currentState"]) => any>(
+  return function useGalenaState<F extends (slice: T["state"]) => any>(
     selection: F
   ) {
     const instanceRef = useRef(slice);
     const [state, setState] = useState<ReturnType<F>>(
-      selection(instanceRef.current.currentState)
+      selection(instanceRef.current.state)
     );
     useEffect(() => {
       const sliceReference = instanceRef.current;
       const ID = sliceReference.subscribe((state) => {
-        setState(selection(state.currentState));
+        setState(selection(state.state));
       });
       return () => {
         sliceReference.unsubscribe(ID);

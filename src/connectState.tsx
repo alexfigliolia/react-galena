@@ -62,12 +62,12 @@ import type { Subtract } from "./types";
  *    1. Any specific component hierarchies
  *    2. Requiring you to declare all your state while your app is mounting
  */
-export const connectState = <StateInstance extends State>(
+export const connectState = <StateInstance extends State<any>>(
   state: StateInstance
 ) => {
   return <
     SelectorFunction extends (
-      state: StateInstance["currentState"],
+      state: StateInstance["state"],
       ownProps: any
     ) => Record<string, any>
   >(
@@ -88,9 +88,9 @@ export const connectState = <StateInstance extends State>(
           props: Subtract<ComponentProps, ReturnType<SelectorFunction>>
         ) {
           super(props);
-          this.state = selection(state.currentState, this.props);
+          this.state = selection(state.state, this.props);
           this.listener = state.subscribe((nextState) => {
-            this.setState(selection(nextState.currentState, this.props));
+            this.setState(selection(nextState.state, this.props));
           });
         }
 

@@ -34,7 +34,7 @@ import type { Subtract } from "./types";
  * }
  *
  * const selectProps = (
- *   state: typeof AppState["currentState"],
+ *   state: typeof AppState["state"],
  *   ownProps
  * ) => {
  *   return { total: state.listItems.get("list").length }
