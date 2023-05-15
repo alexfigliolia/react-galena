@@ -41,10 +41,13 @@ import { useRef } from "react";
 export const createUseGalenaMutation = <T extends Galena<any>>(state: T) => {
   return function useGalenaMutation<
     K extends keyof T["state"],
-    M extends (state: T["state"][K]["state"]) => any
+    P extends any[],
+    M extends (state: T["state"][K]["state"], ...args: P) => any
   >(key: K, mutation: M) {
     const slice = state.getSlice(key);
-    const ref = useRef(slice.mutation(() => mutation(slice.state)));
+    const ref = useRef(
+      slice.mutation((...args: P) => mutation(slice.state, ...args))
+    );
     return ref.current;
   };
 };

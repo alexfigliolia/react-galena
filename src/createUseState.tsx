@@ -54,7 +54,7 @@ export const createUseState = <T extends State>(slice: T) => {
       return () => {
         sliceReference.unsubscribe(ID);
       };
-    }, []);
+    }, [selection]);
     return state;
   };
 };
