@@ -1,6 +1,3 @@
-export { connectGalena } from "./connectGalena";
-export { connectState } from "./connectState";
-export { createUseGalena } from "./createUseGalena";
+export { connect } from "./connect";
 export { createUseState } from "./createUseState";
-export { createUseStateMutation } from "./createUseStateMutation";
-export { createUseGalenaMutation } from "./createUseGalenaMutation";
+export { createUseMutation } from "./createUseMutation";
