@@ -1,51 +1,44 @@
 # React Galena
-React Binding for Galena! Using `galena` with react is simple thanks to a set of HOC and hook factories provided by this package
+React Bindings for Galena! Using `galena` with react is simple thanks to a set of factories for generating HOC's and hooks from your application state.
 
 ## Installation
 
 ```bash
-npm i -S react-galena
+npm i -S galena react-galena
 # or
-yarn add react-galena
+yarn add galena react-galena
 ```
 
-## Connecting Components
-There are two primary API's developers can use for reading and mutating Galena State from React Components - hooks and HOC's! To get started, let's initialize some state and generate some hooks:
+## Getting Started
+There are two primary API's developers can use for reading and mutating Galena State from React Components - hooks and HOC's! To get started, let's initialize some state and generate some hooks for accessing our state:
 
-### Connecting Components to Galena Using Hooks
+### Connecting Components to Galena Using React Hooks
 ```typescript
 // AppState.ts;
-import { Galena, State, Profiler } from "galena";
+import { Galena, State } from "galena";
 import { 
-	createUseState,
-	createUseGalena, 
-	createUseStateMutation,
-	createUseGalenaMutation, 
+  createUseState,
+  createUseGalena, 
+  createUseMutation,
 } from "react-galena"
 
-export const AppState = new Galena<StateShape>([new Profiler()]);
+export const AppState = new Galena<StateShape>();
 
-export const NavigationState = AppState.createSlice("navigation", {
+export const NavigationState = AppState.composeState("navigation", {
 	route: "/";
 	userID: "123",
 	permittedRoutes: "**/*"
 });
 
 // Next, let's create some hooks!
-export const useAppState = createUseGalena(AppState); // A hook for reading values from your global application state
-export const useNavigation = createUseState(NavigationState); // A hook for reading values directly from your Navigation state
-export const useAppStateMutation = createUseGalenaMutation(AppState); // A hook for mutating your global applications state
-export const useNavigationMutation = createUseStateMutation(Navigation); // A hook for mutating your Navigation state directly
+export const useAppState = createUseGalena(AppState); // Returns a hook for selecting values from your global application state
+export const useNavigation = createUseState(NavigationState); // Returns a hook for selecting values from your Navigation state directly
+export const useAppStateMutation = createUseMutation(AppState); // Returns a hook for mutating your Galena State
+export const useNavigationMutation = createUseMutation(Navigation); // Returns a hook for mutating your Navigation state directly
 ```
-Each of the hooks above can provide read or write capabilities to either the `AppState` instance or directly to our `NavigationState`. First we'll look at examples using the global `AppState`
 
-### useAppState and useAppStateMutation
-These hooks allow you to read and mutate state using your Galena instance. 
-#### useAppState
-`useAppState()` is a selector engine for subscribing to data in your Application State. Using `useAppState()` you can read or compute from any value(s) in your application state and your component will re-render any time that value changes.
-
-#### useAppStateMutation
-`useAppStateMutation()` will accept any callback and pre-prepend the current application state to it's arguments. Using your callback you can mutate any slice of state entirely in-place! In the example below, modifying `route` using `useAppStateMutation()` will cause the `useAppState()` selector to rerender with the current value of `NavigationState.route`!
+#### useAppState and useAppStateMutation
+`useAppState()` is a selector engine for subscribing to data in your application state. With your `useAppState()` hook you can read or compute from any value(s) in your application state and your component will re-render any time that value changes. On the other hand, `useAppStateMutation()` accepts the name of a unit of your state and returns it's update function
 
 ```tsx
 // MyComponent.ts
@@ -53,13 +46,16 @@ import { useAppState, useAppStateMutation } from "./AppState";
 import type { NavigationState } from "./AppState".
 
 const MyComponent = () => {
-	const currentRoute = useAppState(state => state.navigation.get("route"));
-	const transitionRoute = useAppStateMutation("navigation", (
-		state: typeof NavigationState["state"], 
-		event: MouseEvent<HTMLAnchorElement>
-	) => {
-		state.route = event.dataset.route;
-	});
+
+	const mutate = useAppStateMutation("navigation");
+
+	const currentRoute = useAppState(({ navigation }) => navigation.route);
+
+	const transitionRoute = (e: MouseEvent<HTMLAnchorElement>) => {
+		mutate(state => {
+			state.route = event.dataset.route;
+		});
+	}
 
 	return (
 		<nav>
@@ -116,7 +112,7 @@ import { connectState, connectGalena } from "react-galena";
 
 export const AppState = new Galena<StateShape>([new Profiler()]);
 
-export const NavigationState = AppState.createSlice("navigation", {
+export const NavigationState = AppState.composeState("navigation", {
 	route: "/";
 	userID: "123",
 	permittedRoutes: "**/*"
@@ -163,7 +159,7 @@ const MyComponent: FC<{ currentRoute: string }> = ({ currentRoute }) => {
 	);
 }
 
-const mSTP = (state: StateShape) => {
+const mSTP = (state: StateShape, ownProps) => {
 	return { currentRoute: state.navigation.get("route") };
 }
 
@@ -199,7 +195,7 @@ const MyComponent: FC<{ currentRoute: string }> = ({ currentRoute }) => {
 	);
 }
 
-const mSTP = (state: typeof NavigationState["state"]) => {
+const mSTP = (state: typeof NavigationState["state"], ownProps) => {
 	return { currentRoute: state.route };
 }
 

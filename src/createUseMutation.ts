@@ -1,12 +1,12 @@
-import { useRef } from "react";
-import type { ReactiveInterface } from "./types";
+import type { Mutations, ReactiveInterface } from "./types";
 
-export const createUseMutation = <T extends ReactiveInterface>(state: T) => {
-  return function useStateMutation(...params: Parameters<T["update"]>) {
-    const callbackRef = useRef(() => {
-      // @ts-ignore
-      return state.update(...params);
-    });
-    return callbackRef.current;
+export function createUseMutation<T extends ReactiveInterface>(state: T) {
+  const mutations: Mutations<T> = {
+    update: state.update.bind(state),
+    backgroundUpdate: state.backgroundUpdate.bind(state),
+    priorityUpdate: state.priorityUpdate.bind(state),
   };
-};
+  return function useGalenaMutation() {
+    return mutations;
+  };
+}

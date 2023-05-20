@@ -34,6 +34,10 @@ export const connect = <StateInstance extends ReactiveInterface>(
           this.state = selection(state.state, this.props);
         }
 
+        static displayName = `GalenaComponent(${
+          WrappedComponent.displayName || WrappedComponent.name || "Component"
+        })`;
+
         componentWillUnmount() {
           unsubscribe(state)(this.listener);
         }

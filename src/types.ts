@@ -9,4 +9,10 @@ export type Subtract<T extends T1, T1 extends object> = Pick<
   SetComplement<keyof T, keyof T1>
 >;
 
-export type ReactiveInterface = Galena<any> | State<any>;
+export type ReactiveInterface = Galena | State;
+
+export interface Mutations<T extends ReactiveInterface> {
+  update: T["update"];
+  backgroundUpdate: T["backgroundUpdate"];
+  priorityUpdate: T["priorityUpdate"];
+}
