@@ -42,7 +42,7 @@ export const useAppStateMutation = createUseMutation(AppState); // Returns a hoo
 export const useNavigationMutation = createUseMutation(Navigation); // Returns a hook for mutating your Navigation state
 ```
 
-#### createUseState
+#### createUseState()
 `createUseState()` will accept any `Galena` instance or unit of `State` as a parameter and return a React Hook for selecting values from your state. Using the hook returned from `createUseState()`, you can read or compute from any value(s) in your application state and your component will re-render any time that value changes:
 
 ```tsx
@@ -65,23 +65,22 @@ const Navigation = () => {
 }
 ```
 
-#### createUseMutation
+#### createUseMutation()
 Similar to `createUseState()`, `createUseMutation()` will accept any `Galena` instance or unit of `State` and return a hook providing mutation methods for updating your state. The `Mutation` object returned by the hook, exposes three methods for updating your state!
 
 ```tsx
 import { useAppStateMutation, useNavigationMutation } from "./AppState";
 
 const Link = ({ route, text }) => {
-	const { update, backgroundUpdate, priorityUpdate } = useAppStateMutation();
-	// or using your Navigation Unit
-	const { update, backgroundUpdate, priorityUpdate } = useNavigationMutation();
+  const { update, backgroundUpdate, priorityUpdate } = useAppStateMutation();
+  // or using your Navigation Unit
+  const { update, backgroundUpdate, priorityUpdate } = useNavigationMutation();
 
-	const onClick = (e) => {
-		e.preventDefault();
-		update(state => {
-			state.route = e.dataset.route;
-		})
-	}
+  const onClick = () => {
+    update(state => {
+      state.route = e.dataset.route;
+    });
+  }
 
 	return (
 		<a data-route={route} onClick={navigate}>{text}</a>
@@ -100,17 +99,17 @@ import { Galena, State} from "@figliolia/galena";
 import { connect } from "@figliolia/react-galena";
 
 export const AppState = new Galena<{
-	navigation: State<{
-		route: string;
-		userID: string;
-		permittedRoutes: string;
-	}>
+  navigation: State<{
+    route: string;
+    userID: string;
+    permittedRoutes: string;
+  }>
 }>();
 
 export const NavigationState = AppState.composeState("navigation", {
-	route: "/";
-	userID: "123",
-	permittedRoutes: "**/*"
+  route: "/";
+  userID: "123",
+  permittedRoutes: "**/*"
 });
 
 // Next, let's create some HOC's!
@@ -126,24 +125,24 @@ import type { useCallback } from "react";
 import { connectAppState, connectNavigation } from "./AppState";
 
 const Navigation: FC<{ route: string }> = ({ route }) => {
-	return (
-		<nav>
-			<div>{route}</div>
-			<Link to="/" />
-			<Link to="/about" />
-			<Link to="/contact" />
-		</nav>
-	);
+  return (
+    <nav>
+      <div>{route}</div>
+      <Link to="/" />
+      <Link to="/about" />
+      <Link to="/contact" />
+    </nav>
+  );
 }
 
 // Using your global applications tate
 export default connectAppState({ navigation } => ({
-	route: navigation.state.route
+  route: navigation.state.route
 }))(Navigation);
 
 // Or using your Navigation Unit
 export default connectNavigation({ state } => ({
-	route: state.route
+  route: state.route
 }));
 ```
 
