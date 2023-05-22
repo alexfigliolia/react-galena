@@ -50,7 +50,7 @@ export const useNavigationMutation = createUseMutation(Navigation); // Returns a
 import { useAppState, useNavigationState } from "./AppState";
 
 const Navigation = () => {
-  const currentRoute = useAppState(({ navigation }) => navigation.route);
+  const currentRoute = useAppState(({ navigation }) => navigation.state.route);
   // or using your Navigation Unit
   const currentRoute = useNavigationState(({ state }) => state.route);
 
