@@ -148,7 +148,7 @@ export default connectNavigation({ state } => ({
 ```
 
 #### Mutating State without createUseMutation()
-When composing your State using `galena`, it's possible to mutate your units of state in your React Components without any Hooks or HOC's. If you'd like to opt for hook-free state mutations, you may simply import the objects returned from `new Galena()`, `new Galena().composeState()`, and `new State()`. These objects are framework agnostic!
+When composing your State using `galena`, it's possible to mutate your units of state in your React Components without Hooks or HOC's. If you'd like to opt into hook-free state mutations, you may simply import the objects returned from `new Galena()`, `new Galena().composeState()`, and `new State()`. These objects are framework and client/server agnostic!
 
 ```tsx
 import { NavigationState } from "./AppState";
