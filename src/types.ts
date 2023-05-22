@@ -1,4 +1,4 @@
-import type { Galena, State } from "galena";
+import type { Galena, State } from "@figliolia/galena";
 
 export type SetDifference<A, B> = A extends B ? never : A;
 

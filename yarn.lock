@@ -46,6 +46,13 @@
   resolved "https://registry.yarnpkg.com/@figliolia/event-emitter/-/event-emitter-1.0.6.tgz#1ae20ac4d2d0d3dcb2919159c4c8f6921de053aa"
   integrity sha512-Vl6no7hf3KO0UvQgynl/X2HzyHt26vX6MBYNO9uVA3/AQHraJidBYz1F55FCUXxQcmJLwM/VCLLLSANR15DZyg==
 
+"@figliolia/galena@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@figliolia/galena/-/galena-1.0.1.tgz#0502fdf1483d6edf7d04f153428aa6003023d9fb"
+  integrity sha512-MpcqcLNGYTUPf1I/FqQxjsC9K5Z9ftmFgA2AX+eYNaEMX7NaPsICPcEuIsddvoauS6RBm9ckavnC3yipDOUrSg==
+  dependencies:
+    "@figliolia/event-emitter" "^1.0.6"
+
 "@humanwhocodes/config-array@^0.11.8":
   version "0.11.8"
   resolved "https://registry.yarnpkg.com/@humanwhocodes/config-array/-/config-array-0.11.8.tgz#03595ac2075a4dc0f191cc2131de14fbd7d410b9"
