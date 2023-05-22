@@ -72,12 +72,12 @@ Similar to `createUseState()`, `createUseMutation()` will accept any `Galena` in
 import { useAppStateMutation, useNavigationMutation } from "./AppState";
 
 const Link = ({ route, text }) => {
-	
+
   const { update, backgroundUpdate, priorityUpdate } = useAppStateMutation();
   // or using your Navigation Unit
   const { update, backgroundUpdate, priorityUpdate } = useNavigationMutation();
 
-  const onClick = () => {
+  const navigate = () => {
     update(state => {
       state.route = e.dataset.route;
     });
@@ -147,3 +147,22 @@ export default connectNavigation({ state } => ({
 }));
 ```
 
+#### Mutating State without createUseMutation()
+When composing your State using `galena`, it's possible to mutate your units of state in your React Components without any Hooks or HOC's. If you'd like to opt for hook-free state mutations, you may simply import the objects returned from `new Galena()`, `new Galena().composeState()`, and `new State()`. These objects are framework agnostic!
+
+```tsx
+import { NavigationState } from "./AppState";
+
+const Link = ({ route, text }) => {
+
+  const navigate = () => {
+    NavigationState.update(state => {
+      state.route = e.dataset.route;
+    });
+  }
+
+  return (
+    <a data-route={route} onClick={navigate}>{text}</a>
+  );
+}
+```
