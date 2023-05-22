@@ -194,8 +194,8 @@ import { transitionRoute } from "./NavigationMutations";
 
 const Link = ({ route, text }) => {
 
-	const navigate = (e) => {
-		transitionRoute(e.dataset.route)
+  const navigate = (e) => {
+    transitionRoute(e.dataset.route)
   }
 
   return (
