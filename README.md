@@ -155,7 +155,7 @@ import { NavigationState } from "./AppState";
 
 const Link = ({ route, text }) => {
 
-  const navigate = () => {
+  const navigate = (e) => {
     NavigationState.update(state => {
       state.route = e.dataset.route;
     });
@@ -193,8 +193,13 @@ Using this pattern, you can simply create your state mutations then import them 
 import { transitionRoute } from "./NavigationMutations";
 
 const Link = ({ route, text }) => {
+
+	const navigate = (e) => {
+		transitionRoute(e.dataset.route)
+  }
+
   return (
-    <a data-route={route} onClick={transitionRoute}>{text}</a>
+    <a data-route={route} onClick={navigate}>{text}</a>
   );
 }
 ```
