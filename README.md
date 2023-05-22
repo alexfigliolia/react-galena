@@ -209,3 +209,8 @@ const Link: FC<{ route: string, text: string }> = ({ route, text }) => {
   );
 }
 ```
+
+#### Demo Application
+
+To see some basic usage using Galena with React, please check out this [Example App](https://github.com/alexfigliolia/galena-quick-start)
+
