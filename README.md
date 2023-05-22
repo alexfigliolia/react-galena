@@ -52,7 +52,7 @@ import { useAppState, useNavigationState } from "./AppState";
 const Navigation = () => {
   const currentRoute = useAppState(({ navigation }) => navigation.state.route);
   // or using the Navigation Unit
-  const currentRoute = useNavigationState(({ state }) => state.route);
+  const currentRoute = useNavigationState((state) => state.route);
 
   return (
     <nav>

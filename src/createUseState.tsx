@@ -77,7 +77,9 @@ export const createUseState = <StateInstance extends ReactiveInterface>(
 
     useEffect(() => {
       const state = instanceRef.current;
-      const ID = subscribe(state)((state) => setProps(selection(state)));
+      const ID = subscribe(state)((nextState) =>
+        setProps(selection(nextState))
+      );
       return () => unsubscribe(state)(ID);
     }, [selection]);
 
