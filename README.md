@@ -30,7 +30,7 @@ export const AppState = new Galena<{
 }>();
 
 export const NavigationState = AppState.composeState("navigation", {
-  route: "/";
+  route: "/",
   userID: "123",
   permittedRoutes: "**/*"
 });
