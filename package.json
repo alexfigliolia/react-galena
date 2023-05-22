@@ -1,6 +1,6 @@
 {
   "name": "@figliolia/react-galena",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "React Bindings for the Galena state management library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,7 +23,6 @@
     "event",
     "flux",
     "@figliolia/galena",
-    "@figliolia/galena",
     "batch",
     "performance"
   ],
@@ -34,7 +33,7 @@
     "lint": "tsc --noemit && eslint ./ --fix"
   },
   "dependencies": {
-    "@figliolia/galena": "^1.0.1"
+    "@figliolia/galena": "^2.0.0"
   },
   "peerDependencies": {
     "react": "^18.2.0"

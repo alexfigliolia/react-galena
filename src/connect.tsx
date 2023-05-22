@@ -90,7 +90,7 @@ export const connect = <StateInstance extends ReactiveInterface>(
         }
 
         private update(nextState: StateInstance["state"]) {
-          this.setState(selection(nextState.state, this.props));
+          this.setState(selection(nextState, this.props));
         }
 
         render() {
