@@ -46,12 +46,12 @@ export const useNavigationMutation = createUseMutation(Navigation); // Returns a
 `createUseState()` will accept any `Galena` instance or unit of `State` as a parameter and return a React Hook for selecting values from your state. Using the hook returned from `createUseState()`, you can read or compute from any value(s) in your application state and your component will re-render any time that value changes:
 
 ```tsx
-// Navigation.ts
+// Navigation.tsx
 import { useAppState, useNavigationState } from "./AppState";
 
 const Navigation = () => {
   const currentRoute = useAppState(({ navigation }) => navigation.state.route);
-  // or using your Navigation Unit
+  // or using the Navigation Unit
   const currentRoute = useNavigationState(({ state }) => state.route);
 
   return (
@@ -74,10 +74,15 @@ import { useAppStateMutation, useNavigationMutation } from "./AppState";
 const Link = ({ route, text }) => {
 
   const { update, backgroundUpdate, priorityUpdate } = useAppStateMutation();
-  // or using your Navigation Unit
+  // or using the Navigation Unit
   const { update, backgroundUpdate, priorityUpdate } = useNavigationMutation();
 
-  const navigate = () => {
+  const navigate = (e) => {
+    // Using the AppState hook
+    update("navigation", state => {
+      state.route = e.dataset.route;
+    });
+    // or using the Navigation Hook
     update(state => {
       state.route = e.dataset.route;
     });
@@ -144,7 +149,7 @@ export default connectAppState({ navigation } => ({
 // Or using your Navigation Unit
 export default connectNavigation({ state } => ({
   route: state.route
-}));
+}))(Navigation);
 ```
 
 #### Mutating State without createUseMutation()

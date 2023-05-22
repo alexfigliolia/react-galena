@@ -3,6 +3,53 @@ import { Component, type ComponentType } from "react";
 import type { ReactiveInterface, Subtract } from "./types";
 import { subscribe, unsubscribe } from "./extractAPI";
 
+/**
+ * # Connect
+ *
+ * A factory for generating Higher Order Components from `Galena`
+ * instances and/or units of `State`. `connect()` provides an
+ * API for React Components to select state values and receive
+ * them as props
+ *
+ * ## Composing State and HOC's
+ *
+ * ```typescript
+ * // AppState.ts
+ * import { Galena } from "@figliolia/galena";
+ * import { connect } from "@figliolia/react-galena";
+ *
+ * const AppState = new Galena();
+ *
+ * const NavigationState = AppState.composeState("navigation", {
+ *   route: "/",
+ *   permittedRoutes: "/**"
+ * });
+ *
+ * export const connectAppState = connect(AppState);
+ * // or using your Navigation Unit
+ * export const connectNavigation = connect(NavigationState);
+ * ```
+ *
+ * ## Using Your Connected HOC's
+ * ```tsx
+ * import { connectAppState, connectNavigation } from "./AppState";
+ *
+ * const MyComponent = ({ route }) => {
+ *   return (
+ *     <div>The current route is {route}</div>
+ *   );
+ * }
+ *
+ * export default connectAppState(({ navigation }) => ({
+ *   route: navigation.state.route
+ * }))(MyComponent);
+ *
+ * // Or using your `connectNavigation()` method
+ * export default connectNavigation((state) => ({
+ *   route: state.route
+ * }))(MyComponent);
+ * ```
+ */
 export const connect = <StateInstance extends ReactiveInterface>(
   state: StateInstance
 ) => {
