@@ -190,12 +190,13 @@ export const updateRoutePermissions = (permissions: string) => {
 Using this pattern, you can simply create your state mutations then import them for use in your React Components and business logic:
 
 ```tsx
+import type { FC } from "react"; 
 import { transitionRoute } from "./NavigationMutations";
 
-const Link = ({ route, text }) => {
+const Link: FC<{ route: string, text: string }> = ({ route, text }) => {
 
   const navigate = (e) => {
-    transitionRoute(e.dataset.route)
+    transitionRoute(e.dataset.route);
   }
 
   return (
