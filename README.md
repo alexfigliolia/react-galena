@@ -72,6 +72,7 @@ Similar to `createUseState()`, `createUseMutation()` will accept any `Galena` in
 import { useAppStateMutation, useNavigationMutation } from "./AppState";
 
 const Link = ({ route, text }) => {
+	
   const { update, backgroundUpdate, priorityUpdate } = useAppStateMutation();
   // or using your Navigation Unit
   const { update, backgroundUpdate, priorityUpdate } = useNavigationMutation();
