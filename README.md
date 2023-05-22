@@ -22,11 +22,11 @@ import {
 } from "@figliolia/react-galena"
 
 export const AppState = new Galena<{
-	navigation: State<{
-		route: string;
-		userID: string;
-		permittedRoutes: string;
-	}>
+  navigation: State<{
+    route: string;
+    userID: string;
+    permittedRoutes: string;
+  }>
 }>();
 
 export const NavigationState = AppState.composeState("navigation", {
@@ -50,18 +50,18 @@ export const useNavigationMutation = createUseMutation(Navigation); // Returns a
 import { useAppState, useNavigationState } from "./AppState";
 
 const Navigation = () => {
-	const currentRoute = useAppState(({ navigation }) => navigation.route);
-	// or using your Navigation Unit
-	const currentRoute = useNavigationState(({ state }) => state.route);
+  const currentRoute = useAppState(({ navigation }) => navigation.route);
+  // or using your Navigation Unit
+  const currentRoute = useNavigationState(({ state }) => state.route);
 
-	return (
-		<nav>
-			<div>{currentRoute}</div>
-			<Link to="/" text="Home" />
-			<Link to="/about" text="About" />
-			<Link to="/contact" text="Contact" />
-		</nav>
-	);
+  return (
+    <nav>
+      <div>{currentRoute}</div>
+      <Link to="/" text="Home" />
+      <Link to="/about" text="About" />
+      <Link to="/contact" text="Contact" />
+    </nav>
+  );
 }
 ```
 
