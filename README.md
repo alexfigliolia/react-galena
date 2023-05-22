@@ -167,8 +167,8 @@ const Link = ({ route, text }) => {
 }
 ```
 
-#### Stateful Actions that can be used inside and outside React!
-For maximum code-reuse, you may choose to compose generic actions for your state instances. This architectural pattern can create a more Redux-like development experience, without requiring you to manage any reducers. 
+#### Stateful Actions that can be used inside and outside of React!
+For maximum code-reuse, you may choose to compose generic actions for your state instances. This architectural pattern can create a more Redux-like development experience - but without requiring you to manage any reducers. 
 
 ```typescript
 // NavigationMutations.ts
@@ -187,7 +187,7 @@ export const updateRoutePermissions = (permissions: string) => {
 }
 ```
 
-Simply create your functions, mutate your state in-place, and import the functions for use in your React Components:
+Using this pattern, you can simply create your state mutations then import them for use in your React Components and business logic:
 
 ```tsx
 import { transitionRoute } from "./NavigationMutations";
