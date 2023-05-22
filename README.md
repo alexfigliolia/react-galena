@@ -82,9 +82,9 @@ const Link = ({ route, text }) => {
     });
   }
 
-	return (
-		<a data-route={route} onClick={navigate}>{text}</a>
-	);
+  return (
+    <a data-route={route} onClick={navigate}>{text}</a>
+  );
 }
 ```
 
