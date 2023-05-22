@@ -91,12 +91,12 @@ const Link = ({ route, text }) => {
 
 To read more about `Galena`'s various mutation methods, please reference the [API Documentation](https://github.com/alexfigliolia/galena#api-reference).
 
-### Connecting Components to Galena Using HOC's
+### Connecting Components to State Using HOC's
 This library provides factories for generating `HOC's` from your `Galena` and `State` instance. Let's take a look at the example above this time, using HOC's:
 
 ```typescript
 // AppState.ts;
-import { Galena, State} from "@figliolia/galena";
+import { Galena, State } from "@figliolia/galena";
 import { connect } from "@figliolia/react-galena";
 
 export const AppState = new Galena<{
