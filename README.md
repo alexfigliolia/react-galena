@@ -66,7 +66,7 @@ const Navigation = () => {
 ```
 
 #### createUseMutation()
-Similar to `createUseState()`, `createUseMutation()` will accept any `Galena` instance or unit of `State` and return a hook providing mutation methods for updating your state. The `Mutation` object returned by the hook, exposes three methods for updating your state!
+Similar to `createUseState()`, `createUseMutation()` will accept any `Galena` instance or unit of `State` and return a hook providing mutation methods for updating your state. The `Mutation` object returned by the hook, exposes three methods for updating your state:
 
 ```tsx
 import { useAppStateMutation, useNavigationMutation } from "./AppState";
@@ -97,7 +97,7 @@ const Link = ({ route, text }) => {
 To read more about `Galena`'s various mutation methods, please reference the [API Documentation](https://github.com/alexfigliolia/galena#api-reference).
 
 ### Connecting Components to State Using HOC's
-This library provides factories for generating `HOC's` from your `Galena` and `State` instance. Let's take a look at the example above this time, using HOC's:
+This library also provides factories for generating `HOC's` from your `Galena` and `State` instances. Let's take a look at the example above, this time, using HOC's:
 
 ```typescript
 // AppState.ts;
@@ -127,7 +127,6 @@ export const connectNavigation = connect(NavigationState); // A HOC for reading 
 ```tsx
 // Navigation.ts
 import type { FC } from "react"; 
-import type { useCallback } from "react"; 
 import { connectAppState, connectNavigation } from "./AppState";
 
 const Navigation: FC<{ route: string }> = ({ route }) => {
@@ -143,12 +142,14 @@ const Navigation: FC<{ route: string }> = ({ route }) => {
 
 // Using your global applications tate
 export default connectAppState({ navigation } => ({
-  route: navigation.state.route
+  route: navigation.state.route,
+  // any other properties
 }))(Navigation);
 
 // Or using your Navigation Unit
 export default connectNavigation({ state } => ({
-  route: state.route
+  route: state.route,
+  // any other properties
 }))(Navigation);
 ```
 
