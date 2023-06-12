@@ -46,10 +46,10 @@
   resolved "https://registry.yarnpkg.com/@figliolia/event-emitter/-/event-emitter-1.0.7.tgz#54a2dbc8628f6462b4a9c269bfffcfaf3e8b37e3"
   integrity sha512-1OrsthsbDSbHnPMAJ+GzqUp8wZb+1mTnGQ3Mos2SbS/YHvLUvocmVWMRQ3YNYnFvFYvfcyRZTQOxz8iAQYT9LA==
 
-"@figliolia/galena@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@figliolia/galena/-/galena-2.0.0.tgz#599de933b95a3fc07e3beb3ac8d2623a61b1f012"
-  integrity sha512-xJNiOuwtRFxKCtIArI6GchBPJJW5Z8j+mXQ1ZaikEyTU1+esY+hNAg9i2+Lp2IS+IITN25O/8CM8pvthJ2mDLQ==
+"@figliolia/galena@^2.0.7":
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/@figliolia/galena/-/galena-2.0.7.tgz#cfe10e201ae4de1391c1530671a36ace40cb9cc7"
+  integrity sha512-a6xbS5aDjiiDs5k20DfVKdOIcETFgJYmGNYzb3n9RLBmrOj4yNTiSvym2DOw5XoQyOGn4vHUg4GfIVqSh3P/5A==
   dependencies:
     "@figliolia/event-emitter" "^1.0.7"
 
