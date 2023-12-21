@@ -13,6 +13,7 @@ yarn add @figliolia/galena @figliolia/react-galena
 There are two primary API's developers can use for reading and mutating Galena State from React Components - hooks and HOC's! To get started, let's initialize some state and generate some hooks for accessing it in React:
 
 ### Connecting Components to State Using React Hooks
+The first part of this example, you're likely already familiar with. Let's set up a basic `Galena` instance at a attach a unit of `State` to it.
 ```typescript
 // AppState.ts;
 import { Galena, State } from "@figliolia/galena";
@@ -35,23 +36,25 @@ export const NavigationState = AppState.composeState("navigation", {
   permittedRoutes: "**/*"
 });
 
-// Next, let's create some hooks!
+// Next, let's create some hooks for our components!
 export const useAppState = createUseState(AppState); // Returns a hook for selecting values from your global application state
 export const useNavigation = createUseState(NavigationState); // Returns a hook for selecting values from your Navigation state
 export const useAppStateMutation = createUseMutation(AppState); // Returns a hook for mutating your Galena State
 export const useNavigationMutation = createUseMutation(Navigation); // Returns a hook for mutating your Navigation state
 ```
 
-#### createUseState()
+### createUseState()
 `createUseState()` will accept any `Galena` instance or unit of `State` as a parameter and return a React Hook for selecting values from your state. Using the hook returned from `createUseState()`, you can read or compute from any value(s) in your application state and your component will re-render any time that value changes:
 
 ```tsx
 // Navigation.tsx
+import React from "react";
 import { useAppState, useNavigationState } from "./AppState";
 
 const Navigation = () => {
   const currentRoute = useAppState(({ navigation }) => navigation.state.route);
-  // or using the Navigation Unit
+  // Alternatively, you can use the hook generated from your 
+  // Navigation unit directly
   const currentRoute = useNavigationState((state) => state.route);
 
   return (
@@ -64,8 +67,15 @@ const Navigation = () => {
   );
 }
 ```
+If you happen to notice, we never placed a `Provider` of any kind in our React Tree when getting setup. 
 
-#### createUseMutation()
+This is because in Galena, this pattern doesn't exist. This library chooses to bypass certain react internals and re-implement them using a scheduling mechanism of its own. 
+
+As a result, state updates can occur in O(1) time, while dispatching updates to your components occurs in a standard O(N), optimized using the priority level ***you*** specify when making mutations!
+
+To read more about the varying mutation priority levels, please feel free to glance over the [State API](https://www.npmjs.com/package/@figliolia/galena#state).
+
+### createUseMutation()
 Similar to `createUseState()`, `createUseMutation()` will accept any `Galena` instance or unit of `State` and return a hook providing mutation methods for updating your state. The `Mutation` object returned by the hook, exposes three methods for updating your state:
 
 ```tsx
@@ -123,7 +133,7 @@ export const connectAppState = connect(AppState); // An HOC for reading values f
 export const connectNavigation = connect(NavigationState); // A HOC for reading values directly from your Navigation state
 ```
 
-#### Using Your Generated HOC's
+### Using Your Generated HOC's
 ```tsx
 // Navigation.ts
 import type { FC } from "react"; 
@@ -153,7 +163,67 @@ export default connectNavigation({ state } => ({
 }))(Navigation);
 ```
 
-#### Mutating State without createUseMutation()
+### Advanced Connections
+The HOC pattern is commonly faulted with the linear space problem. The more HOC's that wrap a given component, the more component wrappers are left in your React tree. While this is not a problem for most applications, it is a problem that `Galena` can solve! Similar to never requiring a `Provider` or hierarchical data flow of any kind, Galena provides a `connectMulti()` factory that'll merge all of your HOC's into a single wrapper!
+
+```typescript
+import { State } from "@figliolia/galena";
+import { connectMulti } from "@figliolia/react-galena";
+
+// Let's create some basic state instances to start
+const ListItems = new State("List Items", [1, 2, 3, 4]);
+const UserData = new State("Current User", { id: 1, name: "Bob Smith" });
+
+// Instead of creating an HOC for each unit, we can use our `connectMulti()` factory to generate a single HOC that'll respond to both units of state
+
+const StateConnection = connectMulti(ListItems, UserData);
+```
+The `StateConnection` HOC can wrap any component you wish using the following pattern
+
+```tsx
+// Let's grab the StateConnection from the code above
+import { StateConnection } from "./StateConnection";
+
+class MyComponent extends Component<{ list: number[], name: string }> {
+
+  override render() {
+    const { name, list } = this.props;
+    return (
+      <div>
+        <div>User Name: {name}</div>
+        <ol>
+          {
+            list.map(el => <li key={el}>{el}</li>)
+          }
+        </ol>
+      </div>
+    );
+  }
+}
+
+// A selector functions for list items
+const grabListItems = (state: ListItems["state"]) => {
+  return { list: state };
+}
+// A selector functions for user name
+const grabUserName = (state: UserData["state"]) => {
+  return { name: state.name };
+}
+
+// Export your connected component!
+export default StateConnection(
+  grabListItems,
+  grabUserName
+)(MyComponent);
+```
+
+As a result, we have a single wrapping layer for `MyComponent` instead of two! 
+
+It should be noted that it is possible to achieve this pattern by simply connecting these units of state to a `Galena` instance and calling `connect(GalenaInstance)`. 
+
+However, as your Galena instances grow in size, using `connectMulti()` to fragment portions of state that often work together can result in better performance and less wasted reconciliations.
+
+### Mutating State without createUseMutation()
 When composing your State using `galena`, it's possible to mutate your units of state in your React Components without Hooks or HOC's. If you'd like to opt into hook-free state mutations, you may simply import the objects returned from `new Galena()`, `new Galena().composeState()`, and `new State()`. These objects are agnostic to framework, client and server!
 
 ```tsx
@@ -173,8 +243,8 @@ const Link = ({ route, text }) => {
 }
 ```
 
-#### Stateful Actions that can be used inside and outside of React!
-For maximum code-reuse, you may choose to compose generic actions for your state instances. This architectural pattern can create a more Redux-like development experience - but without requiring you to manage any reducers. 
+### Stateful Actions that can be used inside and outside of React!
+For maximum code-reuse, you may choose to compose generic actions for your state instances. This architectural pattern can create a more Redux-like development experience - but without requiring you to manage any reducers.
 
 ```typescript
 // NavigationMutations.ts
@@ -211,7 +281,39 @@ const Link: FC<{ route: string, text: string }> = ({ route, text }) => {
 }
 ```
 
-#### Demo Application
+In addition to creating redux-like actions, you can also create a more redux-like event emission pattern through Galena. For example, if you don't wish to interact with your state instances directly, you can try out something like this:
+
+```typescript
+import { EventEmitter } from "@figliolia/event-emitter"
+import { State } from "@figliolia/galena";
+
+const MyStateStream = new EventEmitter<PayLoadTypes>();
+
+// Extend the Default Galena State Instance to bind to actions
+// you can name yourself!
+export class MyState extends State<{ listItems: number[] }> {
+  constructor() {
+    super("My State", { listItems: [1, 2, 3, 4] });
+    this.bindEvents();
+  }
+
+  private bindEvents() {
+    MyStateStream.on("UPDATE_LIST", payload => {
+      super.update(state => {
+        state.listItems = payload
+      })
+    });
+  }
+}
+
+// Next, you can create some redux-like actions to dispatch
+// updates to your state
+export const updateList = (list: number[]) => {
+  MyStateStream.emit("UPDATE_LIST", list);
+}
+```
+
+### Demo Application
 
 To see some basic usage using Galena with React, please check out this [Example App](https://github.com/alexfigliolia/galena-quick-start)
 

@@ -9,12 +9,16 @@ import type {
 import { subscribe, unsubscribe } from "./extractAPI";
 
 /**
- * # Connect Multi (Experimental)
+ * # Connect Multi
  *
- * A factory for generating Higher Order Components from multiple
+ * A HOC factory for generating Higher Order Components from multiple
  * `Galena` instances and/or units of `State`. `connectMulti()`
  * provides an API for React Components to select state values
- * and receive them as props
+ * and receive them as props. It's design is to prevent several layers
+ * of state-connected HOC's from feeding a single component at a time.
+ * `connectMulti()` adds only a single wrapper to your components
+ * regardless of the number of state instances you pass it. Think of
+ * it as the merging of what *would* be several HOC's!
  *
  * ## Composing State and HOC's
  *
@@ -101,7 +105,7 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
           WrappedComponent.displayName || WrappedComponent.name || "Component"
         })`;
 
-        override componentWillUnmount() {
+        public override componentWillUnmount() {
           states.forEach((state, i) => {
             unsubscribe(state)(this.listeners[i]);
           });
@@ -127,7 +131,7 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
           });
         }
 
-        render() {
+        public override render() {
           return <WrappedComponent {...this.props} {...this.state} />;
         }
       };

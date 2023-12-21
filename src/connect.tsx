@@ -85,7 +85,7 @@ export const connect = <StateInstance extends ReactiveInterface>(
           WrappedComponent.displayName || WrappedComponent.name || "Component"
         })`;
 
-        componentWillUnmount() {
+        public override componentWillUnmount() {
           unsubscribe(state)(this.listener);
         }
 
@@ -93,7 +93,7 @@ export const connect = <StateInstance extends ReactiveInterface>(
           this.setState(selection(nextState, this.props));
         }
 
-        render() {
+        public override render() {
           return <WrappedComponent {...this.props} {...this.state} />;
         }
       };
