@@ -1,11 +1,5 @@
 import { PureComponent, type ComponentType } from "react";
-
-import type {
-  Subtract,
-  SelectorFuncs,
-  ReactiveInterface,
-  CombinedReturnTypes,
-} from "./types";
+import type { Subtract, DerivedSelector, ReactiveInterface } from "./types";
 import { subscribe, unsubscribe } from "./extractAPI";
 
 /**
@@ -51,57 +45,36 @@ import { subscribe, unsubscribe } from "./extractAPI";
  *   );
  * }
  *
- * const selectRoute = (navigation) => ({
- *   route: navigation.route
- * });
- *
- * const selectBackgroundMusic = (settings) => ({
+ * const selector = (navigation, settings) => ({
+ *   route: navigation.route,
  *   backgroundMusic: settings.backgroundMusic
  * });
  *
- * export default connectAll(selectRoute, selectBackgroundMusic)(MyComponent);
+ * export default connectAll(selector)(MyComponent);
  * ```
  */
 export const connectMulti = <StateInstances extends ReactiveInterface[]>(
   ...states: StateInstances
 ) => {
-  return <SelectorFunctions extends SelectorFuncs<StateInstances>>(
-    ...selections: SelectorFunctions
+  return <Selector extends DerivedSelector<StateInstances>>(
+    selector: Selector
   ) => {
-    return <
-      ComponentProps extends CombinedReturnTypes<
-        StateInstances,
-        SelectorFunctions
-      >
-    >(
+    return <ComponentProps extends ReturnType<Selector>>(
       WrappedComponent: ComponentType<ComponentProps>
-    ): ComponentType<
-      Subtract<
-        ComponentProps,
-        CombinedReturnTypes<StateInstances, SelectorFunctions>
-      >
-    > => {
+    ): ComponentType<Subtract<ComponentProps, ReturnType<Selector>>> => {
       return class GalenaMultiComponent extends PureComponent<
-        Subtract<
-          ComponentProps,
-          CombinedReturnTypes<StateInstances, SelectorFunctions>
-        >,
-        CombinedReturnTypes<StateInstances, SelectorFunctions>
+        Subtract<ComponentProps, ReturnType<Selector>>,
+        ReturnType<Selector>
       > {
         state: any;
         listeners: string[];
-        constructor(
-          props: Subtract<
-            ComponentProps,
-            CombinedReturnTypes<StateInstances, SelectorFunctions>
-          >
-        ) {
+        constructor(props: Subtract<ComponentProps, ReturnType<Selector>>) {
           super(props);
-          this.state = this.initialState;
+          this.state = this.computeSelector();
           this.listeners = this.bindListeners();
         }
 
-        static displayName = `GalenaMultiComponent(${
+        static displayName = `GalenaDerivedComponent(${
           WrappedComponent.displayName || WrappedComponent.name || "Component"
         })`;
 
@@ -111,24 +84,17 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
           });
         }
 
-        private get initialState() {
-          return Object.assign(
-            {},
-            ...states.map((state, i) => {
-              const selector = selections[i];
-              return selector(state.state, this.props);
-            })
-          ) as CombinedReturnTypes<StateInstances, SelectorFunctions>;
-        }
-
         private bindListeners() {
-          return states.map((state, i) => {
-            const selector = selections[i];
-            return subscribe(state)((nextState: typeof state) => {
-              // @ts-ignore
-              this.setState(selector(nextState, this.props));
+          return states.map((state) => {
+            return subscribe(state)(() => {
+              this.setState(this.computeSelector());
             });
           });
+        }
+
+        private computeSelector() {
+          // @ts-ignore
+          return selector(...states.map((s) => s.getState()));
         }
 
         public override render() {

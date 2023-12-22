@@ -28,6 +28,7 @@
 		"noEmit": true,
 	},
 	"include": [
+		"package.json",
 		"src"
 	]
 }

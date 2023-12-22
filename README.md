@@ -176,13 +176,13 @@ const UserData = new State("Current User", { id: 1, name: "Bob Smith" });
 
 // Instead of creating an HOC for each unit, we can use our `connectMulti()` factory to generate a single HOC that'll respond to both units of state
 
-const StateConnection = connectMulti(ListItems, UserData);
+const ListAndUserConnection = connectMulti(ListItems, UserData);
 ```
-The `StateConnection` HOC can wrap any component you wish using the following pattern
+The `ListAndUserConnection` HOC can wrap any component you wish using the following pattern
 
 ```tsx
-// Let's grab the StateConnection from the code above
-import { StateConnection } from "./StateConnection";
+// Let's grab the ListAndUserConnection from the code above
+import { ListAndUserConnection } from "./ListAndUserConnection";
 
 class MyComponent extends Component<{ list: number[], name: string }> {
 
@@ -201,20 +201,15 @@ class MyComponent extends Component<{ list: number[], name: string }> {
   }
 }
 
-// A selector functions for list items
-const grabListItems = (state: ListItems["state"]) => {
-  return { list: state };
-}
-// A selector functions for user name
-const grabUserName = (state: UserData["state"]) => {
-  return { name: state.name };
+const mySelector = (
+  list: ListItems["state"], 
+  userData: UserData["state"]
+) => {
+  return { list: state, name: userData.name };
 }
 
 // Export your connected component!
-export default StateConnection(
-  grabListItems,
-  grabUserName
-)(MyComponent);
+export default ListAndUserConnection(mySelector)(MyComponent);
 ```
 
 As a result, we have a single wrapping layer for `MyComponent` instead of two! 

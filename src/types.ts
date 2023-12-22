@@ -1,17 +1,4 @@
-import type { Galena, State } from "@figliolia/galena";
-
-export type GetKeys<U> = U extends Record<infer K, any> ? K : never;
-
-export type UnionToIntersection<U extends object> = {
-  [K in GetKeys<U>]: U extends Record<K, infer T> ? T : never;
-};
-
-export type UnionReturnTypes<
-  StateInstances extends ReactiveInterface[],
-  Selectors extends SelectorFuncs<StateInstances>
-> = {
-  [I in keyof Selectors]: ReturnType<Selectors[I]>;
-}[number];
+import type { State, Galena } from "@figliolia/galena";
 
 export type SetDifference<A, B> = A extends B ? never : A;
 
@@ -30,14 +17,10 @@ export interface Mutations<T extends ReactiveInterface> {
   priorityUpdate: T["priorityUpdate"];
 }
 
-export type SelectorFuncs<StateInstances extends ReactiveInterface[]> = {
-  [I in keyof StateInstances]: (
-    state: StateInstances[I]["state"],
-    ownProps: any
-  ) => Record<string, any>;
+export type DerivedArguments<StateInstances extends ReactiveInterface[]> = {
+  [I in keyof StateInstances]: StateInstances[I]["state"];
 } & { length: number };
 
-export type CombinedReturnTypes<
-  StateInstances extends ReactiveInterface[],
-  Selectors extends SelectorFuncs<StateInstances>
-> = UnionToIntersection<UnionReturnTypes<StateInstances, Selectors>>;
+export type DerivedSelector<StateInstances extends ReactiveInterface[]> = (
+  ...args: DerivedArguments<StateInstances>
+) => Record<string, any>;
