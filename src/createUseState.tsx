@@ -3,12 +3,12 @@ import type { ReactiveInterface } from "./types";
 import { subscribe, unsubscribe } from "./extractAPI";
 
 /**
- * # Create Use State
+ * ### Create Use State
  *
  * A factory for generating selectors from `Galena` instances and
  * units of `State`
  *
- * ## Composing State and Selector Hooks!
+ * ### Composing State and Selector Hooks!
  *
  * ```typescript
  * // AppState.ts
@@ -27,7 +27,7 @@ import { subscribe, unsubscribe } from "./extractAPI";
  * export const useNavigationState = createUseState(NavigationState);
  * ```
  *
- * ## Using Selector Hooks in React
+ * ### Using Selector Hooks in React
  * ```tsx
  * import { useAppState, useNavigationState } from "./AppState";
  *

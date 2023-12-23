@@ -168,24 +168,29 @@ The HOC pattern is commonly faulted with the linear space problem. The more HOC'
 
 ```typescript
 import { State } from "@figliolia/galena";
-import { connectMulti } from "@figliolia/react-galena";
+import { connectMulti, type ReactiveStates } from "@figliolia/react-galena";
 
 // Let's create some basic state instances to start
 const ListItems = new State("List Items", [1, 2, 3, 4]);
 const UserData = new State("Current User", { id: 1, name: "Bob Smith" });
 
 // Instead of creating an HOC for each unit, we can use our `connectMulti()` factory to generate a single HOC that'll respond to both units of state
-
 const ListAndUserConnection = connectMulti(ListItems, UserData);
+// The ReactiveStates will generate typed selector parameters
+// for your selector functions
+export type ConnectionArgs = ReactiveStates<typeof ListAndUserConnection>;
+
 ```
 The `ListAndUserConnection` HOC can wrap any component you wish using the following pattern
 
 ```tsx
 // Let's grab the ListAndUserConnection from the code above
-import { ListAndUserConnection } from "./ListAndUserConnection";
+import { 
+  type ConnectionArgs,
+  ListAndUserConnection 
+} from "./ListAndUserConnection";
 
 class MyComponent extends Component<{ list: number[], name: string }> {
-
   override render() {
     const { name, list } = this.props;
     return (
@@ -202,10 +207,10 @@ class MyComponent extends Component<{ list: number[], name: string }> {
 }
 
 const mySelector = (
-  list: ListItems["state"], 
-  userData: UserData["state"]
+  [list, userData]: ConnectionArgs, 
+  ownProps: any
 ) => {
-  return { list: state, name: userData.name };
+  return { list, name: userData.name };
 }
 
 // Export your connected component!

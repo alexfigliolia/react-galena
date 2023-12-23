@@ -1,10 +1,10 @@
 import type { Mutations, ReactiveInterface } from "./types";
 
 /**
- * # Create Use Mutation
+ * ### Create Use Mutation
  * A factory for generating State mutations in the form of React Hooks!
  *
- * ## Composing State and Mutation Hooks!
+ * ### Composing State and Mutation Hooks!
  *
  * ```typescript
  * // AppState.ts
@@ -23,7 +23,7 @@ import type { Mutations, ReactiveInterface } from "./types";
  * export const useNavigationMutation = createUseMutation(NavigationState);
  * ```
  *
- * ## Using Mutation Hooks in React
+ * ### Using Mutation Hooks in React
  * ```tsx
  * import { useAppStateMutation, useNavigationMutation } from "./AppState";
  *

@@ -4,14 +4,14 @@ import type { ReactiveInterface, Subtract } from "./types";
 import { subscribe, unsubscribe } from "./extractAPI";
 
 /**
- * # Connect
+ * ### Connect
  *
  * A factory for generating Higher Order Components from `Galena`
  * instances and/or units of `State`. `connect()` provides an
  * API for React Components to select state values and receive
  * them as props
  *
- * ## Composing State and HOC's
+ * ### Composing State and HOC's
  *
  * ```typescript
  * // AppState.ts
@@ -30,7 +30,7 @@ import { subscribe, unsubscribe } from "./extractAPI";
  * export const connectNavigation = connect(NavigationState);
  * ```
  *
- * ## Using Your Connected HOC's
+ * ### Using Your Connected HOC's
  * ```tsx
  * import { connectAppState, connectNavigation } from "./AppState";
  *

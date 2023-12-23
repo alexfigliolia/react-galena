@@ -1,9 +1,14 @@
 import { PureComponent, type ComponentType } from "react";
-import type { Subtract, DerivedSelector, ReactiveInterface } from "./types";
+import type {
+  Subtract,
+  DerivedSelector,
+  ReactiveInterface,
+  DerivedArguments,
+} from "./types";
 import { subscribe, unsubscribe } from "./extractAPI";
 
 /**
- * # Connect Multi
+ * ### Connect Multi
  *
  * A HOC factory for generating Higher Order Components from multiple
  * `Galena` instances and/or units of `State`. `connectMulti()`
@@ -14,7 +19,7 @@ import { subscribe, unsubscribe } from "./extractAPI";
  * regardless of the number of state instances you pass it. Think of
  * it as the merging of what *would* be several HOC's!
  *
- * ## Composing State and HOC's
+ * ### Composing State and HOC's
  *
  * ```typescript
  * // AppState.ts
@@ -34,7 +39,7 @@ import { subscribe, unsubscribe } from "./extractAPI";
  * export const connectAll = connectMulti(NavigationState, SettingsState);
  * ```
  *
- * ## Using Your Connected HOC's
+ * ### Using Your Connected HOC's
  * ```tsx
  * import { connectAll } from "./AppState";
  *
@@ -93,8 +98,10 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
         }
 
         private computeSelector() {
-          // @ts-ignore
-          return selector(...states.map((s) => s.getState()));
+          return selector(
+            states.map((s) => s.getState()) as DerivedArguments<StateInstances>,
+            this.props
+          );
         }
 
         public override render() {
@@ -104,3 +111,20 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
     };
   };
 };
+
+/**
+ * ### ReactiveStates
+ *
+ * A parameter type extractor for `connectMulti` selectors
+ *
+ * ```typescript
+ * import { connectMulti, type ReactiveStates } from "@figliolia/react-galena";
+ *
+ * const connection = connectMulti(State1, State2, ...rest);
+ *
+ * type SelectorParams = ReactiveStates<typeof Connection>
+ * // [typeof State1["state"], typeof State2["state"], ...rest]
+ * ```
+ */
+export type ReactiveStates<T extends ReturnType<typeof connectMulti>> =
+  Parameters<Parameters<T>[0]>[0];

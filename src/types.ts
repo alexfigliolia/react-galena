@@ -22,5 +22,6 @@ export type DerivedArguments<StateInstances extends ReactiveInterface[]> = {
 } & { length: number };
 
 export type DerivedSelector<StateInstances extends ReactiveInterface[]> = (
-  ...args: DerivedArguments<StateInstances>
+  state: DerivedArguments<StateInstances>,
+  ownProps: any
 ) => Record<string, any>;
