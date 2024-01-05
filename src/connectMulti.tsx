@@ -1,4 +1,4 @@
-import { PureComponent, type ComponentType } from "react";
+import { Component, type ComponentType } from "react";
 import type {
   Subtract,
   DerivedSelector,
@@ -67,7 +67,7 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
     return <ComponentProps extends ReturnType<Selector>>(
       WrappedComponent: ComponentType<ComponentProps>
     ): ComponentType<Subtract<ComponentProps, ReturnType<Selector>>> => {
-      return class GalenaMultiComponent extends PureComponent<
+      return class GalenaMultiComponent extends Component<
         Subtract<ComponentProps, ReturnType<Selector>>,
         ReturnType<Selector>
       > {
@@ -79,9 +79,24 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
           this.listeners = this.bindListeners();
         }
 
-        static displayName = `GalenaDerivedComponent(${
+        static displayName = `GalenaMultiComponent(${
           WrappedComponent.displayName || WrappedComponent.name || "Component"
         })`;
+
+        public override UNSAFE_componentWillReceiveProps(
+          nextProps: Subtract<ComponentProps, ReturnType<Selector>>
+        ) {
+          if (nextProps !== this.props) {
+            this.setState(this.computeSelector(nextProps));
+          }
+        }
+
+        public override shouldComponentUpdate(
+          _: Subtract<ComponentProps, ReturnType<Selector>>,
+          nextState: any
+        ) {
+          return nextState !== this.state;
+        }
 
         public override componentWillUnmount() {
           states.forEach((state, i) => {
@@ -97,10 +112,12 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
           });
         }
 
-        private computeSelector() {
+        private computeSelector(
+          props: Subtract<ComponentProps, ReturnType<Selector>> = this.props
+        ) {
           return selector(
             states.map((s) => s.getState()) as DerivedArguments<StateInstances>,
-            this.props
+            props
           );
         }
 

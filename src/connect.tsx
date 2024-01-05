@@ -70,8 +70,8 @@ export const connect = <StateInstance extends ReactiveInterface>(
         Subtract<ComponentProps, ReturnType<SelectorFunction>>,
         ReturnType<SelectorFunction>
       > {
-        listener: string;
         state: any;
+        private listener: string;
         constructor(
           props: Subtract<ComponentProps, ReturnType<SelectorFunction>>
         ) {
@@ -85,12 +85,30 @@ export const connect = <StateInstance extends ReactiveInterface>(
           WrappedComponent.displayName || WrappedComponent.name || "Component"
         })`;
 
+        public override UNSAFE_componentWillReceiveProps(
+          nextProps: Subtract<ComponentProps, ReturnType<SelectorFunction>>
+        ) {
+          if (nextProps !== this.props) {
+            this.update(state.state, nextProps);
+          }
+        }
+
+        public override shouldComponentUpdate(
+          _: Subtract<ComponentProps, ReturnType<SelectorFunction>>,
+          nextState: any
+        ) {
+          return nextState !== this.state;
+        }
+
         public override componentWillUnmount() {
           unsubscribe(state)(this.listener);
         }
 
-        private update(nextState: StateInstance["state"]) {
-          this.setState(selection(nextState, this.props));
+        private update(
+          nextState: StateInstance["state"],
+          ownProps = this.props
+        ) {
+          this.setState(selection(nextState, ownProps));
         }
 
         public override render() {
