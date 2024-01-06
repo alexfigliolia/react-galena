@@ -90,16 +90,16 @@ const Link = ({ route, text }) => {
   const navigate = (e) => {
     // Using the AppState hook
     update("navigation", state => {
-      state.route = e.dataset.route;
+      state.route = e.target.href;
     });
     // or using the Navigation Hook
     update(state => {
-      state.route = e.dataset.route;
+      state.route = e.target.href;
     });
   }
 
   return (
-    <a data-route={route} onClick={navigate}>{text}</a>
+    <a href={route} onClick={navigate}>{text}</a>
   );
 }
 ```
@@ -157,8 +157,8 @@ export default connectAppState({ navigation } => ({
 }))(Navigation);
 
 // Or using your Navigation Unit
-export default connectNavigation({ state } => ({
-  route: state.route,
+export default connectNavigation({ route } => ({
+  route,
   // any other properties
 }))(Navigation);
 ```
@@ -233,12 +233,12 @@ const Link = ({ route, text }) => {
 
   const navigate = (e) => {
     NavigationState.update(state => {
-      state.route = e.dataset.route;
+      state.route = e.target.href;
     });
   }
 
   return (
-    <a data-route={route} onClick={navigate}>{text}</a>
+    <a href={route} onClick={navigate}>{text}</a>
   );
 }
 ```
@@ -272,11 +272,11 @@ import { transitionRoute } from "./NavigationMutations";
 const Link: FC<{ route: string, text: string }> = ({ route, text }) => {
 
   const navigate = (e) => {
-    transitionRoute(e.dataset.route);
+    transitionRoute(e.target.href);
   }
 
   return (
-    <a data-route={route} onClick={navigate}>{text}</a>
+    <a href={route} onClick={navigate}>{text}</a>
   );
 }
 ```
