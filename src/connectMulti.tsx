@@ -2,8 +2,8 @@ import { Component, type ComponentType } from "react";
 import type {
   Subtract,
   DerivedSelector,
-  ReactiveInterface,
   DerivedArguments,
+  ReactiveInterface,
 } from "./types";
 import { subscribe, unsubscribe } from "./extractAPI";
 
@@ -41,6 +41,7 @@ import { subscribe, unsubscribe } from "./extractAPI";
  *
  * ### Using Your Connected HOC's
  * ```tsx
+ * import type { ReactiveStates } from "@figliolia/react-galena";
  * import { connectAll } from "./AppState";
  *
  * const MyComponent = ({ route, backgroundMusic }) => {
@@ -50,7 +51,9 @@ import { subscribe, unsubscribe } from "./extractAPI";
  *   );
  * }
  *
- * const selector = (navigation, settings) => ({
+ * const selector = (
+ *   [navigation, settings]: ReactiveStates<typeof connectAll>
+ * ) => ({
  *   route: navigation.route,
  *   backgroundMusic: settings.backgroundMusic
  * });
@@ -67,13 +70,14 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
     return <ComponentProps extends ReturnType<Selector>>(
       WrappedComponent: ComponentType<ComponentProps>
     ): ComponentType<Subtract<ComponentProps, ReturnType<Selector>>> => {
+      type OwnProps = Subtract<ComponentProps, ReturnType<Selector>>;
       return class GalenaMultiComponent extends Component<
-        Subtract<ComponentProps, ReturnType<Selector>>,
+        OwnProps,
         ReturnType<Selector>
       > {
         state: any;
         listeners: string[];
-        constructor(props: Subtract<ComponentProps, ReturnType<Selector>>) {
+        constructor(props: OwnProps) {
           super(props);
           this.state = this.computeSelector();
           this.listeners = this.bindListeners();
@@ -83,18 +87,13 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
           WrappedComponent.displayName || WrappedComponent.name || "Component"
         })`;
 
-        public override UNSAFE_componentWillReceiveProps(
-          nextProps: Subtract<ComponentProps, ReturnType<Selector>>
-        ) {
+        public override UNSAFE_componentWillReceiveProps(nextProps: OwnProps) {
           if (nextProps !== this.props) {
             this.setState(this.computeSelector(nextProps));
           }
         }
 
-        public override shouldComponentUpdate(
-          _: Subtract<ComponentProps, ReturnType<Selector>>,
-          nextState: any
-        ) {
+        public override shouldComponentUpdate(_: OwnProps, nextState: any) {
           return nextState !== this.state;
         }
 
@@ -112,9 +111,7 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
           });
         }
 
-        private computeSelector(
-          props: Subtract<ComponentProps, ReturnType<Selector>> = this.props
-        ) {
+        private computeSelector(props: OwnProps = this.props) {
           return selector(
             states.map((s) => s.getState()) as DerivedArguments<StateInstances>,
             props

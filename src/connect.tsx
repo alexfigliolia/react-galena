@@ -66,15 +66,14 @@ export const connect = <StateInstance extends ReactiveInterface>(
     ): ComponentType<
       Subtract<ComponentProps, ReturnType<SelectorFunction>>
     > => {
+      type OwnProps = Subtract<ComponentProps, ReturnType<SelectorFunction>>;
       return class GalenaComponent extends Component<
-        Subtract<ComponentProps, ReturnType<SelectorFunction>>,
+        OwnProps,
         ReturnType<SelectorFunction>
       > {
         state: any;
         private listener: string;
-        constructor(
-          props: Subtract<ComponentProps, ReturnType<SelectorFunction>>
-        ) {
+        constructor(props: OwnProps) {
           super(props);
           this.update = this.update.bind(this);
           this.listener = subscribe(state)(this.update);
@@ -85,18 +84,13 @@ export const connect = <StateInstance extends ReactiveInterface>(
           WrappedComponent.displayName || WrappedComponent.name || "Component"
         })`;
 
-        public override UNSAFE_componentWillReceiveProps(
-          nextProps: Subtract<ComponentProps, ReturnType<SelectorFunction>>
-        ) {
+        public override UNSAFE_componentWillReceiveProps(nextProps: OwnProps) {
           if (nextProps !== this.props) {
             this.update(state.state, nextProps);
           }
         }
 
-        public override shouldComponentUpdate(
-          _: Subtract<ComponentProps, ReturnType<SelectorFunction>>,
-          nextState: any
-        ) {
+        public override shouldComponentUpdate(_: OwnProps, nextState: any) {
           return nextState !== this.state;
         }
 
