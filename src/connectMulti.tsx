@@ -76,16 +76,19 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
         ReturnType<Selector>
       > {
         state: any;
-        listeners: string[];
+        listeners: string[] = [];
         constructor(props: OwnProps) {
           super(props);
           this.state = this.computeSelector();
-          this.listeners = this.bindListeners();
         }
 
         static displayName = `GalenaMultiComponent(${
           WrappedComponent.displayName || WrappedComponent.name || "Component"
         })`;
+
+        public override componentDidMount() {
+          this.listeners = this.bindListeners();
+        }
 
         public override UNSAFE_componentWillReceiveProps(nextProps: OwnProps) {
           if (nextProps !== this.props) {
@@ -101,6 +104,7 @@ export const connectMulti = <StateInstances extends ReactiveInterface[]>(
           states.forEach((state, i) => {
             unsubscribe(state)(this.listeners[i]);
           });
+          this.listeners = [];
         }
 
         private bindListeners() {

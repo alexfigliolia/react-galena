@@ -72,17 +72,20 @@ export const connect = <StateInstance extends ReactiveInterface>(
         ReturnType<SelectorFunction>
       > {
         state: any;
-        private listener: string;
+        private listener: string | null = null;
         constructor(props: OwnProps) {
           super(props);
           this.update = this.update.bind(this);
-          this.listener = subscribe(state)(this.update);
           this.state = selection(state.state, this.props);
         }
 
         static displayName = `GalenaComponent(${
           WrappedComponent.displayName || WrappedComponent.name || "Component"
         })`;
+
+        public override componentDidMount() {
+          this.listener = subscribe(state)(this.update);
+        }
 
         public override UNSAFE_componentWillReceiveProps(nextProps: OwnProps) {
           if (nextProps !== this.props) {
@@ -95,7 +98,10 @@ export const connect = <StateInstance extends ReactiveInterface>(
         }
 
         public override componentWillUnmount() {
-          unsubscribe(state)(this.listener);
+          if (this.listener) {
+            unsubscribe(state)(this.listener);
+            this.listener = null;
+          }
         }
 
         private update(
