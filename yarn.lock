@@ -51,10 +51,10 @@
   resolved "https://registry.yarnpkg.com/@figliolia/event-emitter/-/event-emitter-1.1.1.tgz#f0186db8279f7716dce6e11c122b0699fc96e72a"
   integrity sha512-KgMp1tW6I5kQ3woO21AzjAZhEq+S+Ky9ltLmLenOwc2CzN5kceD341lmDu7xPhRzxea5eaSg715bbkE0snI5IQ==
 
-"@figliolia/galena@^2.2.4":
-  version "2.2.4"
-  resolved "https://registry.yarnpkg.com/@figliolia/galena/-/galena-2.2.4.tgz#2ea4ca726e39b2a65348abd2e2d97926da7b5bb5"
-  integrity sha512-qU8CcgCxPstijlTaoq3oRsMn4J7GCpDfkyQt+dZAK98MR2l3aWnrk7OSdQA3aK980rMR7TA1h8Q32NJnxlOtyQ==
+"@figliolia/galena@^2.2.5":
+  version "2.2.5"
+  resolved "https://registry.yarnpkg.com/@figliolia/galena/-/galena-2.2.5.tgz#f7d55907653efddd5b49ba12f33c4b93f4c8ce12"
+  integrity sha512-GcsB/+6qrE+NhYyCmRUArdlD0CD9i7oxT7Bf9lTAWxBrBgUVgFi4GqtKQS84zYgM8Aqz3cNI7cTerEQZqF3qSg==
   dependencies:
     "@figliolia/event-emitter" "^1.0.8"
 

@@ -1,6 +1,6 @@
 {
   "name": "@figliolia/react-galena",
-  "version": "3.1.6",
+  "version": "3.1.7",
   "description": "React Bindings for the Galena state management library",
   "exports": {
     ".": {
@@ -41,7 +41,7 @@
     "lint": "tsc --noemit && eslint ./ --fix"
   },
   "dependencies": {
-    "@figliolia/galena": "^2.2.4"
+    "@figliolia/galena": "^2.2.5"
   },
   "peerDependencies": {
     "react": "^18.2.0"
