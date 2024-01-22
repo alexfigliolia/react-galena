@@ -1,6 +1,6 @@
 {
   "name": "@figliolia/react-galena",
-  "version": "3.1.8",
+  "version": "3.1.9",
   "description": "React Bindings for the Galena state management library",
   "exports": {
     ".": {
@@ -32,6 +32,7 @@
     "flux",
     "@figliolia/galena",
     "batch",
+    "react",
     "performance"
   ],
   "scripts": {
