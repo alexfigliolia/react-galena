@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactiveInterface } from "./types";
 import { subscribe, unsubscribe } from "./extractAPI";
+import { State } from "@figliolia/galena";
 
 /**
  * ### Create Use State
@@ -74,9 +75,13 @@ export const createUseState = <StateInstance extends ReactiveInterface>(
     );
 
     useEffect(() => {
-      const ID = subscribe(state)((nextState) =>
-        setProps(selection(nextState))
-      );
+      const ID = subscribe(state)((nextState) => {
+        const nextProps = selection(nextState);
+        if (nextProps === nextState && typeof nextProps === "object") {
+          return setProps(State.clone(nextProps));
+        }
+        return setProps(nextProps);
+      });
       return () => unsubscribe(state)(ID);
     }, [selection]);
 
