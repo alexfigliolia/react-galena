@@ -69,14 +69,11 @@ export const createUseState = <StateInstance extends ReactiveInterface>(
   return function useGalenaState<
     SelectorFunction extends (state: StateInstance["state"]) => any
   >(selection: SelectorFunction) {
-    const instanceRef = useRef(state);
-
     const [props, setProps] = useState<ReturnType<SelectorFunction>>(
-      selection(instanceRef.current.state)
+      selection(state.getState())
     );
 
     useEffect(() => {
-      const state = instanceRef.current;
       const ID = subscribe(state)((nextState) =>
         setProps(selection(nextState))
       );
