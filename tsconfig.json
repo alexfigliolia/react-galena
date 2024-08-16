@@ -29,6 +29,8 @@
 	},
 	"include": [
 		"package.json",
-		"src"
+		"src",
+		"ci",
+		".eslintrc.js"
 	]
 }
