@@ -1,75 +1,62 @@
 {
   "name": "@figliolia/react-galena",
-  "version": "3.2.4",
+  "version": "4.0.0",
   "description": "React Bindings for the Galena state management library",
-  "exports": {
-    ".": {
-      "import": "./dist/mjs/index.js",
-      "require": "./dist/cjs/index.js",
-      "types": "./dist/types/index.d.ts"
-    }
-  },
-  "main": "dist/cjs/index.js",
-  "module": "dist/mjs/index.js",
-  "types": "dist/types/index.d.ts",
-  "files": [
-    "dist",
-    "src/*"
+  "keywords": [
+    "@figliolia/galena",
+    "flux",
+    "react",
+    "state",
+    "state management"
   ],
-  "author": "Alex Figliolia",
-  "license": "MIT",
   "homepage": "https://github.com/alexfigliolia/react-galena#readme",
+  "license": "MIT",
+  "author": "Alex Figliolia",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/alexfigliolia/react-galena.git"
   },
-  "keywords": [
-    "state",
-    "state management",
-    "mutable",
-    "extendable",
-    "event",
-    "flux",
-    "@figliolia/galena",
-    "batch",
-    "react",
-    "performance"
+  "files": [
+    "dist",
+    "src",
+    "media"
   ],
-  "scripts": {
-    "build": "ts-packager -e src",
-    "lint": "tsx ci/commands/Lint.ts",
-    "test": "tsx ci/commands/Test.ts"
-  },
-  "dependencies": {
-    "@figliolia/galena": "^2.3.5"
-  },
-  "peerDependencies": {
-    "@figliolia/galena": "^2.3.5",
-    "react": "^18.2.0"
-  },
-  "devDependencies": {
-    "@figliolia/ts-packager": "^1.1.0",
-    "@types/node": "^16.7.13",
-    "@types/react": "^18.2.6",
-    "@typescript-eslint/eslint-plugin": "^5.59.1",
-    "@typescript-eslint/parser": "^5.59.1",
-    "eslint": "^8.39.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-prettier": "^8.8.0",
-    "eslint-import-resolver-typescript": "^3.5.5",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.32.2",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-simple-import-sort": "^10.0.0",
-    "prettier": "^2.8.8",
-    "ts-node": "^10.9.1",
-    "tsc-alias": "^1.8.6",
-    "tsx": "^4.17.0",
-    "typescript": "^4.4.2"
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.cts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./package.json": "./package.json"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "scripts": {
+    "build": "tsdown",
+    "lint": "oxlint --type-aware --type-check --report-unused-disable-directives --fix && oxfmt"
+  },
+  "devDependencies": {
+    "@figliolia/galena": "^3.0.1",
+    "@types/react": "^19.2.14",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
+    "eslint": "^10.0.3",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "oxfmt": "^0.42.0",
+    "oxlint": "^1.36.0",
+    "oxlint-tsgolint": "^0.17.0",
+    "react": "^19.2.4",
+    "tsdown": "^0.21.1",
+    "typescript": "^6.0.2"
+  },
+  "peerDependencies": {
+    "@figliolia/galena": ">=3.0.1",
+    "react": ">=18.0.0"
   }
 }
