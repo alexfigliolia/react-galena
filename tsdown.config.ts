@@ -7,4 +7,5 @@ export default defineConfig({
   unbundle: true,
   format: ["esm", "cjs"],
   exports: true,
+  platform: "neutral",
 });
