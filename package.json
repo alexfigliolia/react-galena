@@ -1,6 +1,6 @@
 {
   "name": "@figliolia/react-galena",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "React Bindings for the Galena state management library",
   "keywords": [
     "@figliolia/galena",
@@ -21,13 +21,13 @@
     "src",
     "media"
   ],
-  "main": "./dist/index.cjs",
+  "main": "./dist/index.js",
   "module": "./dist/index.mjs",
-  "types": "./dist/index.d.cts",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "require": "./dist/index.js"
     },
     "./package.json": "./package.json"
   },
