@@ -1,4 +1,4 @@
-import type { NonFunction, State } from "@figliolia/galena";
+import type { Galena, State } from "@figliolia/galena";
 import { useStableSelector, useStateHookAPI } from "./commonHooks";
 
 /**
@@ -17,7 +17,7 @@ import { useStableSelector, useStateHookAPI } from "./commonHooks";
  *
  * // In your components
  * export const MyComponent = () => {
- *   const [state, setState] = useMyState(
+ *   const state = useMyState(
  *     // optional selector function
  *   );
  *
@@ -39,10 +39,12 @@ import { useStableSelector, useStateHookAPI } from "./commonHooks";
  * const eight = useMyState(state => deeply.nested.data * 2);
  * ```
  */
-export const createUseState = <T>(value: State<T>) => {
+export const createUseState = <T extends State<any> | Galena<any>>(
+  value: T,
+) => {
   return <U = T>(
-    selector = ((value: NonFunction<T>) => value) as (
-      value: NonFunction<T>,
+    selector = ((value: ReturnType<T["getState"]>) => value) as (
+      value: ReturnType<T["getState"]>,
     ) => U,
   ) => {
     const stableSelector = useStableSelector(selector);

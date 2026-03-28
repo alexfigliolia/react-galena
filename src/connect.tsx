@@ -1,11 +1,31 @@
 import { Component, type ComponentType } from "react";
-import type { State } from "@figliolia/galena";
+import type { Galena, State } from "@figliolia/galena";
 import type { Subtract } from "./types";
 
-export const connect = <StateInstance extends State<any>>(
+/**
+ * ### connect
+ *
+ * An HOC generator for React Components connected to your state
+ *
+ * ```typescript
+ * import { State, connect } from "@figliolia/galena";
+ *
+ * const MyState = new State() // or new Galena();
+ * const connectMyState = connect(MyState);
+ *
+ * const MyComponent = props => {}
+ *
+ * const MyConnectedComponent = connectMyState(
+ *   state => ({ data: state })
+ * )(MyComponent);
+ *
+ * // MyConnectedComponent now receives `data` as props
+ * ```
+ */
+export const connect = <StateInstance extends State<any> | Galena<any>>(
   state: StateInstance,
 ) => {
-  type ScopedState = ReturnType<StateInstance["getSnapshot"]>;
+  type ScopedState = ReturnType<StateInstance["getState"]>;
   return <
     SelectorFunction extends (
       state: ScopedState,
@@ -25,7 +45,7 @@ export const connect = <StateInstance extends State<any>>(
         constructor(props: OwnProps) {
           super(props);
           this.update = this.update.bind(this);
-          this.state = selection(state.getSnapshot(), this.props);
+          this.state = selection(state.getState(), this.props);
         }
 
         static displayName = `GalenaComponent(${
@@ -38,7 +58,7 @@ export const connect = <StateInstance extends State<any>>(
 
         public override UNSAFE_componentWillReceiveProps(nextProps: OwnProps) {
           if (nextProps !== this.props) {
-            this.update(state.getSnapshot(), nextProps);
+            this.update(state.getState(), nextProps);
           }
         }
 

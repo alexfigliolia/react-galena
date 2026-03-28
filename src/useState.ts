@@ -34,7 +34,7 @@ import { useStableSelector, useStateHookAPI } from "./commonHooks";
  *
  * const myState = new State({ deeply: { nested: data: 4 } });
  *
- * const eight = useState(myState, state => deeply.nested.data * 2);
+ * const [eight, setState] = useState(myState, state => deeply.nested.data * 2);
  * ```
  */
 export const useState = <T, U = T>(
@@ -46,5 +46,9 @@ export const useState = <T, U = T>(
     () => (value instanceof State ? value : new State(value)),
     [value],
   );
-  return useStateHookAPI(readable, stableSelector);
+  const stateValue = useStateHookAPI(readable, stableSelector);
+  return useMemo(
+    () => [stateValue, readable.update] as const,
+    [stateValue, readable.update],
+  );
 };
