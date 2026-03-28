@@ -5,7 +5,7 @@ import {
   useRef,
   useSyncExternalStore,
 } from "react";
-import type { NonFunction, State } from "@figliolia/galena";
+import type { Galena, State } from "@figliolia/galena";
 
 export function useStableSelector<F extends (...args: any[]) => any>(
   selector: F,
@@ -20,17 +20,10 @@ export function useStableSelector<F extends (...args: any[]) => any>(
   return stableSelector;
 }
 
-export function useStateHookAPI<T, U>(
-  value: State<T>,
-  selector: RefObject<(state: NonFunction<T>) => U>,
+export function useStateHookAPI<T extends State<any> | Galena<any>, U>(
+  value: T,
+  selector: RefObject<(state: ReturnType<T["getState"]>) => U>,
 ) {
-  const state = useSyncExternalStore(value.subscribe, value.getSnapshot);
-  const selectedValue = useMemo(
-    () => selector.current(state),
-    [state, selector],
-  );
-  return useMemo(
-    () => [selectedValue, value.update] as const,
-    [selectedValue, value],
-  );
+  const state = useSyncExternalStore(value.subscribe, value.getState);
+  return useMemo(() => selector.current(state), [state, selector]);
 }

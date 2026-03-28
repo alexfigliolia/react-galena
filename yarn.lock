@@ -129,10 +129,10 @@
     "@eslint/core" "^1.1.1"
     levn "^0.4.1"
 
-"@figliolia/galena@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@figliolia/galena/-/galena-3.0.1.tgz#f6690b5691f13398b350c6e1b6ea2770143fc206"
-  integrity sha512-g5OS911xlv/7PKP2hv35h3nkZd+VwkqiPZWnh3S7HnCqFjjIxJLqJq0MVMsX2CRTsSFoI/ea8IKAtKX+P1+4VQ==
+"@figliolia/galena@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@figliolia/galena/-/galena-4.0.0.tgz#0c2c6ab4793c0853788578311a6a94ec2c53d6e0"
+  integrity sha512-gwTYH79rmQLYbqpC/ZyrHHl5Sg0wmnRDmhYuYaqgPR2M0clzRmOhl9p+fV104D4DSOZAPUk7UXRZCZs0rx43GQ==
 
 "@humanfs/core@^0.19.1":
   version "0.19.1"

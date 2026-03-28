@@ -1,8 +1,35 @@
 import { Component, type ComponentType } from "react";
-import type { State } from "@figliolia/galena";
+import type { Galena, State } from "@figliolia/galena";
 import type { DerivedArguments, DerivedSelector, Subtract } from "./types";
 
-export const connectMulti = <StateInstances extends State<any>[]>(
+/**
+ * ### connectMulti
+ *
+ * An HOC generator for React Components connected to multiple
+ * instances of state at once
+ *
+ * ```typescript
+ * import { State, connect } from "@figliolia/galena";
+ *
+ * const MyState1 = new State();
+ * const MyState2 = new State();
+ * const connectMyState = connectMulti(MyState1, MyState2);
+ *
+ * const MyComponent = props => {}
+ *
+ * const MyConnectedComponent = connectMyState(
+ *   ([myState1, myState2]) => ({
+ *     state1: myState1,
+ *     state2: myState2,
+ *   })
+ * )(MyComponent);
+ *
+ * // MyConnectedComponent now receives `state1` and `state2` as props
+ * ```
+ */
+export const connectMulti = <
+  StateInstances extends (State<any> | Galena<any>)[],
+>(
   ...states: StateInstances
 ) => {
   return <Selector extends DerivedSelector<StateInstances>>(
@@ -58,9 +85,7 @@ export const connectMulti = <StateInstances extends State<any>[]>(
 
         private computeSelector(props: OwnProps = this.props) {
           return selector(
-            states.map(s =>
-              s.getSnapshot(),
-            ) as DerivedArguments<StateInstances>,
+            states.map(s => s.getState()) as DerivedArguments<StateInstances>,
             props,
           );
         }
