@@ -94,7 +94,7 @@ export const connectNavigation = connect(AppState.get("navigation"));
 export const connectUser = connect(AppState.get("user"));
 // An HOC for deriving react props directly from your User state
 
-export const connectNavAndUser = connect(
+export const connectNavAndUser = connectMulti(
   AppState.get("navigation"),
   AppState.get("user"),
 );
