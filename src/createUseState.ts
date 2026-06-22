@@ -42,10 +42,9 @@ import { useStableSelector, useStateHookAPI } from "./commonHooks";
 export const createUseState = <T extends State<any> | Galena<any>>(
   value: T,
 ) => {
-  return <U = T>(
-    selector = ((value: ReturnType<T["getState"]>) => value) as (
-      value: ReturnType<T["getState"]>,
-    ) => U,
+  type State = ReturnType<T["getState"]>;
+  return <U = State>(
+    selector = ((state: State) => state) as (value: State) => U,
   ) => {
     const stableSelector = useStableSelector(selector);
     return useStateHookAPI(value, stableSelector);
